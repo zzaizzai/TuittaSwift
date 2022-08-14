@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
-
+import Firebase
 @main
 struct TuittaSwiftApp: App {
+    
+    @StateObject var vmAuth = AuthViewModel()
+    
+    init() {
+        FirebaseApp.configure()
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(vmAuth)
         }
     }
 }
