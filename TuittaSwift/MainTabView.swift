@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MainTabView: View {
     
+    
+    
     @State var titleName = ""
     var body: some View {
         TabView(selection: $titleName) {
@@ -45,6 +47,7 @@ struct MainTabView: View {
 
 struct TabView_Previews: PreviewProvider {
     static var previews: some View {
-        MainTabView()
+        ContentView()
+            .environmentObject(AuthViewModel())
     }
 }

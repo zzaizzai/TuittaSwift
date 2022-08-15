@@ -33,8 +33,9 @@ struct ContentView_Previews: PreviewProvider {
 extension ContentView {
     var mainInterfaceView: some View {
         ZStack {
-            MainTabView()
+            MainTabView2()
                 .offset(x: vmAuth.showMenu ? 200 : 0, y:0)
+            
             
             
             if vmAuth.showMenu {

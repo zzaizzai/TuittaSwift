@@ -27,6 +27,8 @@
 		A668C66928A964DD00242496 /* MainMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C66828A964DD00242496 /* MainMessagesView.swift */; };
 		A668C66B28A9685700242496 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C66A28A9685700242496 /* NotificationView.swift */; };
 		A668C66D28A96E6000242496 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C66C28A96E6000242496 /* ImagePicker.swift */; };
+		A668C66F28AA1BAC00242496 /* MainTabView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C66E28AA1BAC00242496 /* MainTabView2.swift */; };
+		A668C67128AA276800242496 /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C67028AA276800242496 /* SideMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,8 @@
 		A668C66828A964DD00242496 /* MainMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMessagesView.swift; sourceTree = "<group>"; };
 		A668C66A28A9685700242496 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		A668C66C28A96E6000242496 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		A668C66E28AA1BAC00242496 /* MainTabView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView2.swift; sourceTree = "<group>"; };
+		A668C67028AA276800242496 /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +96,9 @@
 				A668C66028A9438C00242496 /* MainPostsView.swift */,
 				A668C66828A964DD00242496 /* MainMessagesView.swift */,
 				A668C66A28A9685700242496 /* NotificationView.swift */,
+				A668C67028AA276800242496 /* SideMenuView.swift */,
 				A668C66228A955F600242496 /* MainTabView.swift */,
+				A668C66E28AA1BAC00242496 /* MainTabView2.swift */,
 				A668C66428A95E7200242496 /* Models.swift */,
 				A668C63E28A9242000242496 /* ContentView.swift */,
 				A668C64028A9242300242496 /* Assets.xcassets */,
@@ -194,10 +200,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				A668C65F28A9387100242496 /* AuthViewModel.swift in Sources */,
+				A668C66F28AA1BAC00242496 /* MainTabView2.swift in Sources */,
 				A668C66928A964DD00242496 /* MainMessagesView.swift in Sources */,
 				A668C66128A9438C00242496 /* MainPostsView.swift in Sources */,
 				A668C65D28A928D900242496 /* LoginView.swift in Sources */,
 				A668C63F28A9242000242496 /* ContentView.swift in Sources */,
+				A668C67128AA276800242496 /* SideMenuView.swift in Sources */,
 				A668C66328A955F600242496 /* MainTabView.swift in Sources */,
 				A668C63D28A9242000242496 /* TuittaSwiftApp.swift in Sources */,
 				A668C66D28A96E6000242496 /* ImagePicker.swift in Sources */,
