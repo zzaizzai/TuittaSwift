@@ -17,7 +17,7 @@ class AuthViewModel: ObservableObject {
     
     @Published var errorMessage = "error message desu"
     
-    @Published var showMenu : Bool = true
+    @Published var showMenu : Bool = false
     @Published var tabIndex : Int = 0
     
     init() {

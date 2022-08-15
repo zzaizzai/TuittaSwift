@@ -10,45 +10,67 @@ import SDWebImageSwiftUI
 
 struct MainPostsView: View {
     
+    @State private var showNewTweetView = false
+    
     @EnvironmentObject var vmAuth: AuthViewModel
     
     var body: some View {
-        ScrollView{
-            VStack{
-                Text("text")
+        ZStack(alignment: .bottomTrailing) {
+            ScrollView{
+                VStack{
+                    Text("text")
+                    
+                    Divider()
+                    PostView()
+                    PostView()
+                    PostView()
+                }
+            }
+            .navigationTitle("posts")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading:
+                                    VStack{
+                ZStack{
+                    WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(100)
+                        .zIndex(1)
+                    
+                    Image(systemName: "person")
+                        .resizable()
+                        .background(Color.gray)
+                        .frame(width: 30, height: 30)
+                        .cornerRadius(100)
+                }
                 
-                Divider()
-                PostView()
-                PostView()
-                PostView()
-            }
-        }
-        .navigationTitle("posts")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarItems(leading:
-                                VStack{
-            ZStack{
-                WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40)
-                    .cornerRadius(100)
-                    .zIndex(1)
-
-                Image(systemName: "person")
-                    .resizable()
-                    .background(Color.gray)
-                    .frame(width: 30, height: 30)
-                    .cornerRadius(100)
-            }
-
                 .onTapGesture {
                     withAnimation(.easeInOut) {
                         vmAuth.showMenu = true
                     }
-
+                    
                 }
-        })
+            })
+            
+            Button {
+                self.showNewTweetView.toggle()
+            } label: {
+                Image(systemName: "plus")
+                    .resizable()
+                    .frame(width: 28, height: 28)
+                    .padding()
+            }
+            .background(Color.blue)
+            .foregroundColor(Color.white)
+            .clipShape(Circle())
+            .padding()
+            .fullScreenCover(isPresented: $showNewTweetView) {
+                NewPostView ()
+                
+            }
+
+        }
     }
 }
 
