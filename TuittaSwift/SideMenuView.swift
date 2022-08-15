@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 
 struct SideMenuView: View {
     
+    
     @EnvironmentObject var vmAuth: AuthViewModel
     
     var process : (String) -> ()
@@ -19,105 +20,105 @@ struct SideMenuView: View {
     var body: some View {
         HStack {
             
-            
             VStack(alignment: .leading) {
                 
                 VStack(alignment: .leading){
                     
-                    
                     //profile image
-                    
-                    ZStack{
-                        WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(100)
-                            .zIndex(1)
+                    VStack(alignment: .leading) {
+                        ZStack{
+                            WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(100)
+                                .zIndex(1)
+                            
+                            Image(systemName: "person")
+                                .resizable()
+                                .background(Color.gray)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(100)
+                            //                            Text("profile view show")
+                        }
+                        .onTapGesture {
+                            withAnimation(.easeInOut) {
+                                process("profile")
+                            }
+                        }
                         
-                        Image(systemName: "person")
-                            .resizable()
-                            .background(Color.gray)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(100)
-                        //                            Text("profile view show")
-                    }
-                    .onTapGesture {
-                        withAnimation(.easeInOut) {
-                            process("profile")
+                        
+                        Text(vmAuth.currentUser?.name ?? "no user name")
+                            .font(.title)
+                        
+                        Text(vmAuth.currentUser?.email ?? "no user email")
+                            .font(.subheadline)
+                            .foregroundColor(Color.init(white: 0.4))
+                        
+                        HStack{
+                            Text("following")
+                            Text(vmAuth.currentUser?.follower.description ?? "10")
+                            
+                            Text("follower")
+                            Text(vmAuth.currentUser?.follower.description ?? "10")
                         }
                     }
-                    
-                    
-                    Text(vmAuth.currentUser?.name ?? "no user name")
-                        .font(.title)
-                    
-                    Text(vmAuth.currentUser?.email ?? "no user email")
-                        .font(.subheadline)
-                        .foregroundColor(Color.init(white: 0.4))
-                    
-                    HStack{
-                        Text("following")
-                        Text(vmAuth.currentUser?.follower.description ?? "10")
-                        
-                        Text("follower")
-                        Text(vmAuth.currentUser?.follower.description ?? "10")
-                    }
-                    
-                    
-                    
+                    .padding()
                     
                 }
                 
+                //posts
                 ScrollView {
-                    Button {
-                        
-                    } label: {
-                        
-                        HStack{
-                            Image(systemName: "person")
-                            
-                            Text("profile")
-                                .fontWeight(.bold)
-                                .padding()
-                            
-                            Spacer()
-                        }
-                        
-                    }
-                    .foregroundColor(Color.black)
-                    .background(Color.gray)
                     
-                    
-                    Button {
+                    VStack{
                         
-                        vmAuth.logOut()
-                        
-                    } label: {
-                        
-                        HStack{
-                            Image(systemName: "person")
+                        Button {
+                            withAnimation(.easeInOut) {
+                                process("profile")
+                            }
                             
-                            Text("log out")
-                                .fontWeight(.bold)
-                                .padding()
+                        } label: {
                             
-                            Spacer()
+                            HStack{
+                                Image(systemName: "person")
+                                
+                                Text("profile")
+                                    .fontWeight(.bold)
+                                
+                                Spacer()
+                            }
+                            
                         }
+                        .padding()
                         .foregroundColor(Color.black)
                         
+                        Button {
+                            
+                            vmAuth.logOut()
+                            
+                        } label: {
+                            
+                            HStack{
+                                Image(systemName: "iphone.slash")
+                                
+                                Text("log out")
+                                    .fontWeight(.bold)
+                                
+                                Spacer()
+                            }
+                            
+                        }
+                        .padding()
+                        .foregroundColor(Color.black)
+                        
+                        
                     }
-                    .background(Color.gray)
-                    
                 }
-                
-                
             }
             
             Spacer()
             
         }
-        .padding(.horizontal, 8)
         
     }
 }
@@ -127,7 +128,7 @@ struct SideMenuView_Previews: PreviewProvider {
         SideMenuView(process: { _  in
             
         })
-            .environmentObject(AuthViewModel())
+        .environmentObject(AuthViewModel())
         //        ContentView()
         //            .environmentObject(AuthViewModel())
     }

@@ -97,7 +97,7 @@ struct ProfileView: View {
             }
             
         }
-        .padding()
+        .padding(.horizontal)
     }
 }
 
