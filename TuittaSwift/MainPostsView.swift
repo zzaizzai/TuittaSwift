@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct MainPostsView: View {
+    
+    @EnvironmentObject var vmAuth: AuthViewModel
+    
     var body: some View {
         ScrollView{
             VStack{
@@ -26,6 +29,12 @@ struct MainPostsView: View {
             Image(systemName: "person")
                 .background(Color.gray)
                 .cornerRadius(100)
+                .onTapGesture {
+                    withAnimation(.easeInOut) {
+                        vmAuth.showMenu = true
+                    }
+                    
+                }
         })
     }
 }
@@ -43,11 +52,44 @@ struct PostView: View {
                 VStack(alignment: .leading){
                     HStack{
                         Text("name")
+                            .fontWeight(.bold)
                         Spacer()
                         Text("date")
                             .foregroundColor(Color.gray)
                     }
+                    
+                    
                     Text("contenttext messages is the content messages is the content message is si the messages that...... ")
+                    
+                    HStack{
+                        Image(systemName: "message")
+                            .onTapGesture {
+                                print("comment")
+                            }
+                        Text("0")
+                        
+                        Spacer()
+                        
+                        Image(systemName: "arrow.2.squarepath")
+                            .onTapGesture {
+                                print("repost")
+                            }
+                        Text("0")
+                        
+                        Spacer()
+                        
+                        Group{
+                            Image(systemName: "heart")
+                                .onTapGesture {
+                                    print("like it")
+                                }
+                            Text("0")
+                        }
+//                        .foregroundColor(Color.red)
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 1)
                 }
                 
                 Spacer()
@@ -55,6 +97,8 @@ struct PostView: View {
                 Text("...")
             }
             .padding(.horizontal)
+            
+            
             
             Divider()
         }
@@ -65,6 +109,7 @@ struct MainPostsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView{
             MainPostsView()
+                .environmentObject(AuthViewModel())
         }
     }
 }
