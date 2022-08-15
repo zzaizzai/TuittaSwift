@@ -14,27 +14,16 @@ struct MainTabView2: View {
     var body: some View {
         VStack{
             if vmAuth.tabIndex == 0 {
-//                NavigationView{
-                    MainPostsView()
-//                }
+                MainPostsView()
                 
             } else if vmAuth.tabIndex == 1 {
-                    ScrollView{
-                        Text("explore")
-                        Text("explore")
-                    }
-                        .navigationBarTitle("explore")
-                        .navigationBarTitleDisplayMode(.inline)
+                ExploreView()
                 
             } else if vmAuth.tabIndex == 2 {
-//                NavigationView{
-                    Text("bell")
-//                }
+                NotificationView()
                 
             } else if vmAuth.tabIndex == 3 {
-//                NavigationView{
-                    Text("envelope")
-//                }
+                MainMessagesView()
                 
             }
             
@@ -67,7 +56,7 @@ struct MainTabView2: View {
             HStack{
                 
                 Spacer()
-
+                
                 if vmAuth.tabIndex == 0 {
                     Image(systemName: "person.fill")
                 } else {
@@ -78,8 +67,8 @@ struct MainTabView2: View {
                 }
                 
                 Spacer()
-
-
+                
+                
                 if vmAuth.tabIndex == 1 {
                     Image(systemName: "message.fill")
                 } else {

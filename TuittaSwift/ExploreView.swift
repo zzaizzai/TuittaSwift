@@ -1,24 +1,22 @@
 //
-//  NotificationView.swift
+//  ExploreView.swift
 //  TuittaSwift
 //
-//  Created by 小暮準才 on 2022/08/15.
+//  Created by 小暮準才 on 2022/08/16.
 //
 
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct NotificationView: View {
+struct ExploreView: View {
     
     @EnvironmentObject var vmAuth: AuthViewModel
     
-    
     var body: some View {
         ScrollView{
-            Text("notification view")
-            Text("notification view")
+            Text("explore")
         }
-        .navigationTitle("notification")
+        .navigationBarTitle("explore")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(leading:
                                 VStack{
@@ -47,11 +45,9 @@ struct NotificationView: View {
     }
 }
 
-struct NotificationView_Previews: PreviewProvider {
+struct ExploreView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView{
-            NotificationView()
-                .environmentObject(AuthViewModel())
-        }
+        ExploreView()
+            .environmentObject(AuthViewModel())
     }
 }

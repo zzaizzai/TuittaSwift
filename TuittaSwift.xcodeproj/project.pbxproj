@@ -32,6 +32,8 @@
 		A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8952428AA3DE400317AD1 /* LaboView.swift */; };
 		A6E4F1AB28AA73FF00010D07 /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */; };
 		A6E4F1AD28AA913C00010D07 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1AC28AA913C00010D07 /* ProfileView.swift */; };
+		A6E4F1AF28AAAEA600010D07 /* ChatMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1AE28AAAEA600010D07 /* ChatMessagesView.swift */; };
+		A6E4F1B128AAB95600010D07 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1B028AAB95600010D07 /* ExploreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +57,8 @@
 		A6A8952428AA3DE400317AD1 /* LaboView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaboView.swift; sourceTree = "<group>"; };
 		A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
 		A6E4F1AC28AA913C00010D07 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		A6E4F1AE28AAAEA600010D07 /* ChatMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessagesView.swift; sourceTree = "<group>"; };
+		A6E4F1B028AAB95600010D07 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +106,8 @@
 				A668C66028A9438C00242496 /* MainPostsView.swift */,
 				A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */,
 				A668C66828A964DD00242496 /* MainMessagesView.swift */,
+				A6E4F1AE28AAAEA600010D07 /* ChatMessagesView.swift */,
+				A6E4F1B028AAB95600010D07 /* ExploreView.swift */,
 				A668C66A28A9685700242496 /* NotificationView.swift */,
 				A6A8952428AA3DE400317AD1 /* LaboView.swift */,
 				A668C67028AA276800242496 /* SideMenuView.swift */,
@@ -215,10 +221,12 @@
 				A668C66128A9438C00242496 /* MainPostsView.swift in Sources */,
 				A668C65D28A928D900242496 /* LoginView.swift in Sources */,
 				A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */,
+				A6E4F1AF28AAAEA600010D07 /* ChatMessagesView.swift in Sources */,
 				A6E4F1AD28AA913C00010D07 /* ProfileView.swift in Sources */,
 				A668C63F28A9242000242496 /* ContentView.swift in Sources */,
 				A668C67128AA276800242496 /* SideMenuView.swift in Sources */,
 				A668C66328A955F600242496 /* MainTabView.swift in Sources */,
+				A6E4F1B128AAB95600010D07 /* ExploreView.swift in Sources */,
 				A668C63D28A9242000242496 /* TuittaSwiftApp.swift in Sources */,
 				A668C66D28A96E6000242496 /* ImagePicker.swift in Sources */,
 				A668C66528A95E7200242496 /* Models.swift in Sources */,
