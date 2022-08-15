@@ -18,6 +18,7 @@ class AuthViewModel: ObservableObject {
     @Published var errorMessage = "error message desu"
     
     @Published var showMenu : Bool = false
+    @Published var tabIndex : Int = 0
     
     init() {
         self.userSession = Auth.auth().currentUser

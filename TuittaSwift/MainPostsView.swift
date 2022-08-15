@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct MainPostsView: View {
     
@@ -26,14 +27,26 @@ struct MainPostsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(leading:
                                 VStack{
-            Image(systemName: "person")
-                .background(Color.gray)
-                .cornerRadius(100)
+            ZStack{
+                WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+                    .cornerRadius(100)
+                    .zIndex(1)
+
+                Image(systemName: "person")
+                    .resizable()
+                    .background(Color.gray)
+                    .frame(width: 30, height: 30)
+                    .cornerRadius(100)
+            }
+
                 .onTapGesture {
                     withAnimation(.easeInOut) {
                         vmAuth.showMenu = true
                     }
-                    
+
                 }
         })
     }
