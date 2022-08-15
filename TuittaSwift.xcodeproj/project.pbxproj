@@ -30,6 +30,7 @@
 		A668C66F28AA1BAC00242496 /* MainTabView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C66E28AA1BAC00242496 /* MainTabView2.swift */; };
 		A668C67128AA276800242496 /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C67028AA276800242496 /* SideMenuView.swift */; };
 		A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8952428AA3DE400317AD1 /* LaboView.swift */; };
+		A6E4F1AB28AA73FF00010D07 /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,7 @@
 		A668C66E28AA1BAC00242496 /* MainTabView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView2.swift; sourceTree = "<group>"; };
 		A668C67028AA276800242496 /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		A6A8952428AA3DE400317AD1 /* LaboView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaboView.swift; sourceTree = "<group>"; };
+		A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				A668C66C28A96E6000242496 /* ImagePicker.swift */,
 				A668C65C28A928D900242496 /* LoginView.swift */,
 				A668C66028A9438C00242496 /* MainPostsView.swift */,
+				A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */,
 				A668C66828A964DD00242496 /* MainMessagesView.swift */,
 				A668C66A28A9685700242496 /* NotificationView.swift */,
 				A6A8952428AA3DE400317AD1 /* LaboView.swift */,
@@ -205,6 +208,7 @@
 				A668C65F28A9387100242496 /* AuthViewModel.swift in Sources */,
 				A668C66F28AA1BAC00242496 /* MainTabView2.swift in Sources */,
 				A668C66928A964DD00242496 /* MainMessagesView.swift in Sources */,
+				A6E4F1AB28AA73FF00010D07 /* NewPostView.swift in Sources */,
 				A668C66128A9438C00242496 /* MainPostsView.swift in Sources */,
 				A668C65D28A928D900242496 /* LoginView.swift in Sources */,
 				A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */,

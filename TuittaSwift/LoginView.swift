@@ -140,7 +140,6 @@ struct LoginView: View {
                         .frame(width: 100, height: 100)
                         .cornerRadius(100)
                     
-                    
                 } else {
                     Image(systemName: "person")
                         .font(.system(size: 60))
