@@ -34,7 +34,7 @@ struct MainTabView: View {
             }
             
             NavigationView{
-                Text("messages")
+                MainMessagesView()
             }
             .tabItem {
                 Image(systemName: "envelope")

@@ -17,6 +17,8 @@ class AuthViewModel: ObservableObject {
     
     @Published var errorMessage = "error message desu"
     
+    @Published var showMenu : Bool = false
+    
     init() {
         self.userSession = Auth.auth().currentUser
         self.fetchUserData()
@@ -31,13 +33,10 @@ class AuthViewModel: ObservableObject {
             }
             guard let user = result?.user else { return }
             self.userSession = user
-            self.errorMessage = "login done"
             
             self.fetchUserData()
             
-            
-            
-            
+            self.errorMessage = "login done"
         }
     }
     
@@ -92,15 +91,10 @@ class AuthViewModel: ObservableObject {
                 }
             }
         }
-        
-        
-            
-        
     }
     
     func fetchUserData() {
         
-        self.errorMessage = "1"
         
         guard let myUid = self.userSession?.uid else {
             print("no userssion uid")
@@ -111,7 +105,7 @@ class AuthViewModel: ObservableObject {
                 print(error)
                 return
             }
-            self.errorMessage = "2"
+            
             guard let documentId = snapshot?.documentID else {
                 self.errorMessage = "no document"
                 return }
@@ -159,7 +153,6 @@ class AuthViewModel: ObservableObject {
                     return
                 }
                 
-
             }
             
             self.storeProfileImage(profileImage: profileImage) { didStoredImage in
