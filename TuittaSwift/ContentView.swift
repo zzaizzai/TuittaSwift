@@ -34,8 +34,6 @@ struct ContentView_Previews: PreviewProvider {
 
 extension ContentView {
     
-    
-    
     var mainInterfaceView: some View {
         ZStack {
             NavigationView{
@@ -56,7 +54,6 @@ extension ContentView {
                     Color.black
                         .opacity(0.75)
                 }
-//                .navigationBarHidden(true)
                 .onTapGesture {
                     withAnimation(.easeInOut) {
                         vmAuth.showMenu = false
