@@ -13,15 +13,20 @@ struct SideMenuView: View {
     
     @EnvironmentObject var vmAuth: AuthViewModel
     
+    var process : (String) -> ()
+    
     
     var body: some View {
         HStack {
+            
+            
             VStack(alignment: .leading) {
                 
                 VStack(alignment: .leading){
-                   
+                    
                     
                     //profile image
+                    
                     ZStack{
                         WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
                             .resizable()
@@ -35,7 +40,14 @@ struct SideMenuView: View {
                             .background(Color.gray)
                             .frame(width: 50, height: 50)
                             .cornerRadius(100)
+                        //                            Text("profile view show")
                     }
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            process("profile")
+                        }
+                    }
+                    
                     
                     Text(vmAuth.currentUser?.name ?? "no user name")
                         .font(.title)
@@ -53,30 +65,30 @@ struct SideMenuView: View {
                     }
                     
                     
-                
+                    
                     
                 }
                 
                 ScrollView {
-                        Button {
+                    Button {
+                        
+                    } label: {
+                        
+                        HStack{
+                            Image(systemName: "person")
                             
-                        } label: {
+                            Text("profile")
+                                .fontWeight(.bold)
+                                .padding()
                             
-                            HStack{
-                                Image(systemName: "person")
-                                
-                                Text("profile")
-                                    .fontWeight(.bold)
-                                    .padding()
-                                
-                                Spacer()
-                            }
-                            
+                            Spacer()
                         }
-                        .foregroundColor(Color.black)
-                        .background(Color.gray)
                         
-                        
+                    }
+                    .foregroundColor(Color.black)
+                    .background(Color.gray)
+                    
+                    
                     Button {
                         
                         vmAuth.logOut()
@@ -96,13 +108,14 @@ struct SideMenuView: View {
                         
                     }
                     .background(Color.gray)
-
+                    
                 }
                 
                 
             }
             
             Spacer()
+            
         }
         .padding(.horizontal, 8)
         
@@ -111,7 +124,9 @@ struct SideMenuView: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView()
+        SideMenuView(process: { _  in
+            
+        })
             .environmentObject(AuthViewModel())
         //        ContentView()
         //            .environmentObject(AuthViewModel())

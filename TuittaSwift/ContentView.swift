@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var showMyProfile = false
+    
 
     
     @EnvironmentObject var vmAuth: AuthViewModel
@@ -17,7 +19,7 @@ struct ContentView: View {
         if vmAuth.userSession == nil {
             LoginView()
         } else {
-            mainInterfaceView
+                mainInterfaceView
         }
     }
 }
@@ -31,11 +33,22 @@ struct ContentView_Previews: PreviewProvider {
 
 
 extension ContentView {
+    
+    
+    
     var mainInterfaceView: some View {
         ZStack {
-            MainTabView2()
-                .offset(x: vmAuth.showMenu ? 250 : 0, y:0)
-            
+            NavigationView{
+                ZStack{
+                    MainTabView2()
+                    
+                    NavigationLink("", isActive: $showMyProfile) {
+                        ProfileView(user: vmAuth.currentUser)
+                    }
+                }
+                    
+            }
+            .offset(x: vmAuth.showMenu ? 250 : 0, y:0)
             
             
             if vmAuth.showMenu {
@@ -43,9 +56,11 @@ extension ContentView {
                     Color.black
                         .opacity(0.75)
                 }
+//                .navigationBarHidden(true)
                 .onTapGesture {
                     withAnimation(.easeInOut) {
                         vmAuth.showMenu = false
+                        
                     }
                     
                 }
@@ -54,17 +69,19 @@ extension ContentView {
             
             HStack{
                 VStack{
-                    SideMenuView()
+                    SideMenuView { process in
+                        if process == "profile" {
+                            vmAuth.showMenu = false
+                            self.showMyProfile = true
+                        }
+                    }
                         .frame(width: 250)
                         .background(Color.white)
                         
                     
                     Spacer()
                     
-                    
                 }
-                
-                
                 
                 Spacer()
                 
@@ -73,9 +90,7 @@ extension ContentView {
             .offset(x: vmAuth.showMenu ? 0 : -260, y: 0)
             .zIndex(1)
             
-            
-            
-            
         }
+        
     }
 }
