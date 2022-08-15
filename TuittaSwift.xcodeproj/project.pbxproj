@@ -31,6 +31,7 @@
 		A668C67128AA276800242496 /* SideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C67028AA276800242496 /* SideMenuView.swift */; };
 		A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8952428AA3DE400317AD1 /* LaboView.swift */; };
 		A6E4F1AB28AA73FF00010D07 /* NewPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */; };
+		A6E4F1AD28AA913C00010D07 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E4F1AC28AA913C00010D07 /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		A668C67028AA276800242496 /* SideMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuView.swift; sourceTree = "<group>"; };
 		A6A8952428AA3DE400317AD1 /* LaboView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaboView.swift; sourceTree = "<group>"; };
 		A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostView.swift; sourceTree = "<group>"; };
+		A6E4F1AC28AA913C00010D07 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				A668C66A28A9685700242496 /* NotificationView.swift */,
 				A6A8952428AA3DE400317AD1 /* LaboView.swift */,
 				A668C67028AA276800242496 /* SideMenuView.swift */,
+				A6E4F1AC28AA913C00010D07 /* ProfileView.swift */,
 				A668C66228A955F600242496 /* MainTabView.swift */,
 				A668C66E28AA1BAC00242496 /* MainTabView2.swift */,
 				A668C66428A95E7200242496 /* Models.swift */,
@@ -212,6 +215,7 @@
 				A668C66128A9438C00242496 /* MainPostsView.swift in Sources */,
 				A668C65D28A928D900242496 /* LoginView.swift in Sources */,
 				A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */,
+				A6E4F1AD28AA913C00010D07 /* ProfileView.swift in Sources */,
 				A668C63F28A9242000242496 /* ContentView.swift in Sources */,
 				A668C67128AA276800242496 /* SideMenuView.swift in Sources */,
 				A668C66328A955F600242496 /* MainTabView.swift in Sources */,

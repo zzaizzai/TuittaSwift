@@ -14,24 +14,27 @@ struct MainTabView2: View {
     var body: some View {
         VStack{
             if vmAuth.tabIndex == 0 {
-                NavigationView{
+//                NavigationView{
                     MainPostsView()
-                }
+//                }
                 
             } else if vmAuth.tabIndex == 1 {
-                NavigationView{
-                    Text("explore")
-                }
+                    ScrollView{
+                        Text("explore")
+                        Text("explore")
+                    }
+                        .navigationBarTitle("explore")
+                        .navigationBarTitleDisplayMode(.inline)
                 
             } else if vmAuth.tabIndex == 2 {
-                NavigationView{
+//                NavigationView{
                     Text("bell")
-                }
+//                }
                 
             } else if vmAuth.tabIndex == 3 {
-                NavigationView{
+//                NavigationView{
                     Text("envelope")
-                }
+//                }
                 
             }
             

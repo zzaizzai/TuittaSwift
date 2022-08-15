@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 import Firebase
+import FirebaseFirestore
 
 
 struct User: Identifiable, Codable {
@@ -16,7 +17,7 @@ struct User: Identifiable, Codable {
     
     let documentId: String
     let uid, name, email, profileImageUrl, profileText: String
-    let joinDate: Date
+    let joinDate: Timestamp
     var following, follower : Int
     
     init(documentId: String, data: [String:Any]) {
@@ -26,7 +27,7 @@ struct User: Identifiable, Codable {
         self.name = data["name"] as? String ?? "no name"
         self.profileImageUrl = data["profileImageUrl"] as? String ?? "no profileImageUrl"
         self.profileText = data["profileText"] as? String ?? "no profileText"
-        self.joinDate = data["joinDate"] as? Date ?? Date()
+        self.joinDate = data["joinDate"] as? Timestamp ?? Timestamp()
         self.following = data["following"] as? Int ?? 0
         self.follower = data["follower"] as? Int ?? 0
     }
