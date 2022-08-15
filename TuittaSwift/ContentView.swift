@@ -34,14 +34,14 @@ extension ContentView {
     var mainInterfaceView: some View {
         ZStack {
             MainTabView2()
-                .offset(x: vmAuth.showMenu ? 200 : 0, y:0)
+                .offset(x: vmAuth.showMenu ? 250 : 0, y:0)
             
             
             
             if vmAuth.showMenu {
                 ZStack{
                     Color.black
-                        .opacity(0.3)
+                        .opacity(0.75)
                 }
                 .onTapGesture {
                     withAnimation(.easeInOut) {
@@ -52,10 +52,29 @@ extension ContentView {
                 .ignoresSafeArea()
             }
             
-            Text("show menu")
-                .frame(width: 200)
-                .offset(x: vmAuth.showMenu ? 0 : -300, y: 0)
-//                .background(vmAuth.showMenu ? Color.white : Color.clear)
+            HStack{
+                VStack{
+                    SideMenuView()
+                        .frame(width: 250)
+                        .background(Color.white)
+                        
+                    
+                    Spacer()
+                    
+                    
+                }
+                
+                
+                
+                Spacer()
+                
+                
+            }
+            .offset(x: vmAuth.showMenu ? 0 : -260, y: 0)
+            .zIndex(1)
+            
+            
+            
             
         }
     }

@@ -17,6 +17,7 @@ struct User: Identifiable, Codable {
     let documentId: String
     let uid, name, email, profileImageUrl, profileText: String
     let joinDate: Date
+    var following, follower : Int
     
     init(documentId: String, data: [String:Any]) {
         self.documentId = documentId
@@ -26,6 +27,8 @@ struct User: Identifiable, Codable {
         self.profileImageUrl = data["profileImageUrl"] as? String ?? "no profileImageUrl"
         self.profileText = data["profileText"] as? String ?? "no profileText"
         self.joinDate = data["joinDate"] as? Date ?? Date()
+        self.following = data["following"] as? Int ?? 0
+        self.follower = data["follower"] as? Int ?? 0
     }
     
     

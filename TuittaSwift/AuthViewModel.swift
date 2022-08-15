@@ -17,7 +17,7 @@ class AuthViewModel: ObservableObject {
     
     @Published var errorMessage = "error message desu"
     
-    @Published var showMenu : Bool = false
+    @Published var showMenu : Bool = true
     @Published var tabIndex : Int = 0
     
     init() {
@@ -146,6 +146,8 @@ class AuthViewModel: ObservableObject {
                 "joinDate": Date(),
                 "profileImageUrl" : "",
                 "profileText" : "",
+                "follower" : 0,
+                "following" : 0,
             ] as [String: Any]
             
             Firestore.firestore().collection("users").document(user.uid).setData(newUserData){ error in
