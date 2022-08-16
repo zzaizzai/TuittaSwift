@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>161125037597-3cof9ei347979mdo16jm0bnma8qud812.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.161125037597-3cof9ei347979mdo16jm0bnma8qud812</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD6B8omo6T4AP8mF5cDx-IbkHDDh2nUqos</string>
+	<key>GCM_SENDER_ID</key>
+	<string>161125037597</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.jun.TuittaSwift</string>
+	<key>PROJECT_ID</key>
+	<string>tuittaswift</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tuittaswift.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:161125037597:ios:2aa4b8344ca7d5a4ba38f4</string>
+</dict>
+</plist>

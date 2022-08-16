@@ -14,7 +14,11 @@ struct ExploreView: View {
     
     var body: some View {
         ScrollView{
-            Text("explore")
+            Text("show all users")
+            
+            NavigationLink("", isActive: $vmAuth.showProfile) {
+                ProfileView(user: vmAuth.currentUser)
+            }
         }
         .navigationBarTitle("explore")
         .navigationBarTitleDisplayMode(.inline)

@@ -15,8 +15,31 @@ struct NotificationView: View {
     
     var body: some View {
         ScrollView{
-            Text("notification view")
-            Text("notification view")
+            
+            HStack(alignment: .top) {
+                Image(systemName: "person")
+                    .resizable()
+                    .background(Color.gray)
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(100)
+                
+                VStack(alignment: .leading) {
+                    HStack{
+                        Text("name")
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                        
+                        Text("time")
+                    }
+                    Text("comment text")
+                }
+                
+                
+            }
+            .padding(.horizontal)
+            
+            
         }
         .navigationTitle("notification")
         .navigationBarTitleDisplayMode(.inline)

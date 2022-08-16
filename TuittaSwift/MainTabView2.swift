@@ -17,10 +17,14 @@ struct MainTabView2: View {
                 NavigationView{
                     ZStack{
                         if vmAuth.tabIndex == 0 {
-                            MainPostsView()
+//                            NavigationView{
+                                MainPostsView()
+//                            }
                             
                         } else if vmAuth.tabIndex == 1 {
-                            ExploreView()
+//                            NavigationView{
+                                ExploreView()
+//                            }
                             
                         } else if vmAuth.tabIndex == 2 {
                             NotificationView()
@@ -34,6 +38,8 @@ struct MainTabView2: View {
                         NavigationLink("", isActive: $vmAuth.showProfile) {
                             ProfileView(user: vmAuth.currentUser)
                         }
+
+                     
                     }
                     
                     
@@ -42,6 +48,7 @@ struct MainTabView2: View {
                     
                 
             }
+            .padding(.bottom, 50)
             bottomTab
         }
     }

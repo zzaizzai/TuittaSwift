@@ -7,23 +7,57 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Firebase
+
+class NewPostViewModel: ObservableObject {
+    
+    @Published var newPostText = ""
+    
+    func uploadNewPost(user: User?, completion: @escaping(Bool)-> Void ) {
+        
+        guard let uploadUser = user else { return }
+        
+        let data = [
+            "authorUid": uploadUser.uid,
+            "authorEmail" : uploadUser.email,
+            "authorName" : uploadUser.name,
+            "authorProfileUrl" : uploadUser.profileImageUrl,
+            "postText" : self.newPostText,
+            "postImageUrl" : "",
+            "time" : Date(),
+            
+        ] as [String:Any]
+        
+        Firestore.firestore().collection("posts").document().setData(data) { error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            completion(true)
+            
+        }
+        
+    }
+    
+    
+}
 
 struct NewPostView: View {
     
     @EnvironmentObject var vmAuth: AuthViewModel
+    @ObservedObject var vm = NewPostViewModel()
     
-    @State private var uploadText : String = ""
     @FocusState private var isFocused : Bool
     @Environment(\.dismiss) private var dismiss
     
-//    var didUploadPost : (Bool) -> ()
+    //    var didUploadPost : (Bool) -> ()
     
     var body: some View {
         ZStack(alignment: .topLeading) {
             VStack{
                 HStack{
                     Button {
-//                        self.didUploadPost(true)
                         dismiss()
                     } label: {
                         Text("Cancle")
@@ -31,16 +65,36 @@ struct NewPostView: View {
                     
                     Spacer()
                     
-                    Button {
-                        self.isFocused = true
-                    } label: {
-                        Text("upload")
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 8)
-                            .foregroundColor(Color.white)
-                            .background(Color.blue)
-                            .cornerRadius(30)
-                            .padding()
+                    ZStack{
+                        if vm.newPostText.isEmpty{
+                            
+                            Text("upload")
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 8)
+                                .foregroundColor(Color.gray)
+                                .background(Color.init(red: 0.1, green: 0.4, blue: 0.8))
+                                .cornerRadius(30)
+                                .padding()
+                            
+                        } else {
+                            Button {
+                                vm.uploadNewPost(user: vmAuth.currentUser) { didUpload in
+                                    if didUpload {
+                                        vm.newPostText = ""
+                                        dismiss()
+                                        
+                                    }
+                                }
+                            } label: {
+                                Text("upload")
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 8)
+                                    .foregroundColor(Color.white)
+                                    .background(Color.blue)
+                                    .cornerRadius(30)
+                                    .padding()
+                            }
+                        }
                     }
                     
                 }
@@ -63,19 +117,20 @@ struct NewPostView: View {
                         }
                         
                         ZStack(alignment: .topLeading) {
-                            if self.uploadText.isEmpty {
-                                Text("heelo ")
+                            if vm.newPostText.isEmpty {
+                                Text("hello world ")
                                     .padding(10)
                                     .foregroundColor(Color.gray)
                                     .zIndex(1)
                             }
-                                TextEditor(text: $uploadText)
+                            TextEditor(text: $vm.newPostText)
+                                .frame(height: 400)
                                 .focused(self.$isFocused)
-                                
+                            
                         }
                     }
                 }
-
+                
                 
                 Spacer()
                 
@@ -87,7 +142,7 @@ struct NewPostView: View {
                 
             }
             .padding(.horizontal)
-
+            
             .onTapGesture {
                 self.isFocused = true
             }
@@ -99,6 +154,6 @@ struct NewPostView: View {
 struct NewPostView_Previews: PreviewProvider {
     static var previews: some View {
         NewPostView ()
-        .environmentObject(AuthViewModel())
+            .environmentObject(AuthViewModel())
     }
 }

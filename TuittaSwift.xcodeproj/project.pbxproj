@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A6111F1F28AB75CB00543F83 /* DetailPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6111F1E28AB75CB00543F83 /* DetailPostView.swift */; };
 		A668C63D28A9242000242496 /* TuittaSwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C63C28A9242000242496 /* TuittaSwiftApp.swift */; };
 		A668C63F28A9242000242496 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C63E28A9242000242496 /* ContentView.swift */; };
 		A668C64128A9242300242496 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A668C64028A9242300242496 /* Assets.xcassets */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A6111F1E28AB75CB00543F83 /* DetailPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPostView.swift; sourceTree = "<group>"; };
 		A668C63928A9242000242496 /* TuittaSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuittaSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A668C63C28A9242000242496 /* TuittaSwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TuittaSwiftApp.swift; sourceTree = "<group>"; };
 		A668C63E28A9242000242496 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				A668C66C28A96E6000242496 /* ImagePicker.swift */,
 				A668C65C28A928D900242496 /* LoginView.swift */,
 				A668C66028A9438C00242496 /* MainPostsView.swift */,
+				A6111F1E28AB75CB00543F83 /* DetailPostView.swift */,
 				A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */,
 				A668C66828A964DD00242496 /* MainMessagesView.swift */,
 				A6E4F1AE28AAAEA600010D07 /* ChatMessagesView.swift */,
@@ -225,6 +228,7 @@
 				A6E4F1AD28AA913C00010D07 /* ProfileView.swift in Sources */,
 				A668C63F28A9242000242496 /* ContentView.swift in Sources */,
 				A668C67128AA276800242496 /* SideMenuView.swift in Sources */,
+				A6111F1F28AB75CB00543F83 /* DetailPostView.swift in Sources */,
 				A668C66328A955F600242496 /* MainTabView.swift in Sources */,
 				A6E4F1B128AAB95600010D07 /* ExploreView.swift in Sources */,
 				A668C63D28A9242000242496 /* TuittaSwiftApp.swift in Sources */,
