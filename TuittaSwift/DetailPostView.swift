@@ -7,14 +7,63 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Firebase
+
+
 
 class DetailPostViewModel: ObservableObject {
     
+    private let service = Service()
+    @Published var comments = [Comment]()
     
     @Published var post : Post?
     
+    @Published var commentText : String = ""
+    
     init(post: Post?){
         self.post = post
+        fetchComments(post: post)
+    }
+    
+    func fetchComments(post: Post? ) {
+        
+        guard let post = post else { return }
+        
+        Firestore.firestore().collection("posts").document(post.id).collection("comments").order(by: "time").getDocuments { snapshots, _ in
+            
+            snapshots?.documents.forEach({ doc in
+                let documentId = doc.documentID
+                let data = doc.data()
+                
+                self.service.getUserData(userUid: post.authorUid) { userData in
+                    self.comments.append(.init(documentId: documentId, user: userData, data: data))
+                }
+               
+            })
+        }
+    }
+    
+    func replyComment(post: Post?, user: User?) {
+        
+        guard let post = post else { return }
+        guard let user = user else { return }
+        
+        
+        let data = [
+            "userUid" : user.uid,
+            "time" : Date(),
+            "postUid" : post.id,
+            "commentText" : self.commentText
+        ] as [String:Any]
+        
+        Firestore.firestore().collection("posts").document(post.id).collection("comments").document().setData(data) { error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            self.commentText = ""
+        }
     }
 }
 
@@ -22,15 +71,13 @@ class DetailPostViewModel: ObservableObject {
 struct DetailPostView: View {
     
     @ObservedObject var vm : DetailPostViewModel
+    @EnvironmentObject var vmAuth: AuthViewModel
     
     
     init(post: Post?) {
         self.vm = DetailPostViewModel(post: post)
         
     }
-    
-    
-
     
     var body: some View {
         VStack{
@@ -114,29 +161,65 @@ struct DetailPostView: View {
                     .font(.title3)
                     .padding(.vertical, 3)
                     
-                    
                 }
                 
                 Divider()
                 
                 // comment text field
-                DetailPostCommentView()
-                DetailPostCommentView()
+                ForEach(vm.comments) { comment in
+                    DetailPostCommentView(comment: comment)
+                }
                 
             }
             
-
+            bottomChat
+//                .padding(.vertical, 50)
+            
         }
+    }
+    
+    
+    private var bottomChat: some View{
+        HStack{
+            TextField("reply a message", text: $vm.commentText)
+                .padding(.horizontal)
+                .padding(.vertical, 12)
+                .background(Color.white)
+                .cornerRadius(30)
+                .padding(.vertical, 10)
+            
+            if vm.commentText.isEmpty {
+                Image(systemName: "paperplane")
+                    .font(.system(size: 25))
+                    .foregroundColor(Color.init(white: 0.7))
+                
+            } else {
+                Button {
+                    vm.replyComment(post: vm.post, user: vmAuth.currentUser)
+                    
+                } label: {
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 25))
+                        .foregroundColor(Color.white)
+                }
+                
+            }
+        }
+        .padding(.horizontal)
+        .background(Color.gray)
     }
 }
 
 struct DetailPostCommentView: View {
+    
+    let comment: Comment
+    
     var body: some View {
         LazyVStack(alignment: .leading){
             HStack(alignment: .top){
                 
                 ZStack{
-                    WebImage(url: URL(string: ""))
+                    WebImage(url: URL(string: comment.user.profileImageUrl))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 45, height: 45)
@@ -152,15 +235,16 @@ struct DetailPostCommentView: View {
                 
                 VStack(alignment: .leading){
                     HStack{
-                        Text("name")
+                        Text(comment.user.name)
                             .fontWeight(.bold)
                         Spacer()
-                        Text("time")
+                        HStack{
+                            Text(comment.time.dateValue(), style: .time)
+                        }
                             .foregroundColor(Color.gray)
                     }
                     
-                    
-                    Text("text")
+                    Text(comment.commentText)
                     
                     HStack{
                         Image(systemName: "message")
@@ -186,7 +270,6 @@ struct DetailPostCommentView: View {
                                 }
                             Text("0")
                         }
-                        //                        .foregroundColor(Color.red)
                         
                         Spacer()
                     }
@@ -199,8 +282,6 @@ struct DetailPostCommentView: View {
             }
             .padding(.horizontal)
             
-            
-            
             Divider()
         }
     }
@@ -208,6 +289,8 @@ struct DetailPostCommentView: View {
 
 struct DetailPostView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailPostView(post: nil)
+//        DetailPostView(post: nil)
+        ContentView()
+            .environmentObject(AuthViewModel())
     }
 }

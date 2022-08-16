@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A6111F1F28AB75CB00543F83 /* DetailPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6111F1E28AB75CB00543F83 /* DetailPostView.swift */; };
+		A6111F2128ABAD0200543F83 /* LaboView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6111F2028ABAD0100543F83 /* LaboView2.swift */; };
+		A6111F2328ABE2EF00543F83 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6111F2228ABE2EF00543F83 /* Service.swift */; };
 		A668C63D28A9242000242496 /* TuittaSwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C63C28A9242000242496 /* TuittaSwiftApp.swift */; };
 		A668C63F28A9242000242496 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A668C63E28A9242000242496 /* ContentView.swift */; };
 		A668C64128A9242300242496 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A668C64028A9242300242496 /* Assets.xcassets */; };
@@ -39,6 +41,8 @@
 
 /* Begin PBXFileReference section */
 		A6111F1E28AB75CB00543F83 /* DetailPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPostView.swift; sourceTree = "<group>"; };
+		A6111F2028ABAD0100543F83 /* LaboView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaboView2.swift; sourceTree = "<group>"; };
+		A6111F2228ABE2EF00543F83 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		A668C63928A9242000242496 /* TuittaSwift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TuittaSwift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A668C63C28A9242000242496 /* TuittaSwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TuittaSwiftApp.swift; sourceTree = "<group>"; };
 		A668C63E28A9242000242496 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,11 +112,13 @@
 				A668C66028A9438C00242496 /* MainPostsView.swift */,
 				A6111F1E28AB75CB00543F83 /* DetailPostView.swift */,
 				A6E4F1AA28AA73FF00010D07 /* NewPostView.swift */,
+				A6111F2228ABE2EF00543F83 /* Service.swift */,
 				A668C66828A964DD00242496 /* MainMessagesView.swift */,
 				A6E4F1AE28AAAEA600010D07 /* ChatMessagesView.swift */,
 				A6E4F1B028AAB95600010D07 /* ExploreView.swift */,
 				A668C66A28A9685700242496 /* NotificationView.swift */,
 				A6A8952428AA3DE400317AD1 /* LaboView.swift */,
+				A6111F2028ABAD0100543F83 /* LaboView2.swift */,
 				A668C67028AA276800242496 /* SideMenuView.swift */,
 				A6E4F1AC28AA913C00010D07 /* ProfileView.swift */,
 				A668C66228A955F600242496 /* MainTabView.swift */,
@@ -222,6 +228,7 @@
 				A668C66928A964DD00242496 /* MainMessagesView.swift in Sources */,
 				A6E4F1AB28AA73FF00010D07 /* NewPostView.swift in Sources */,
 				A668C66128A9438C00242496 /* MainPostsView.swift in Sources */,
+				A6111F2128ABAD0200543F83 /* LaboView2.swift in Sources */,
 				A668C65D28A928D900242496 /* LoginView.swift in Sources */,
 				A6A8952528AA3DE400317AD1 /* LaboView.swift in Sources */,
 				A6E4F1AF28AAAEA600010D07 /* ChatMessagesView.swift in Sources */,
@@ -233,6 +240,7 @@
 				A6E4F1B128AAB95600010D07 /* ExploreView.swift in Sources */,
 				A668C63D28A9242000242496 /* TuittaSwiftApp.swift in Sources */,
 				A668C66D28A96E6000242496 /* ImagePicker.swift in Sources */,
+				A6111F2328ABE2EF00543F83 /* Service.swift in Sources */,
 				A668C66528A95E7200242496 /* Models.swift in Sources */,
 				A668C66B28A9685700242496 /* NotificationView.swift in Sources */,
 			);
