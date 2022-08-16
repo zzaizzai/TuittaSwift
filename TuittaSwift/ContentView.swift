@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @State private var showMyProfile = false
     
-
+    
     
     @EnvironmentObject var vmAuth: AuthViewModel
     
@@ -19,7 +19,7 @@ struct ContentView: View {
         if vmAuth.userSession == nil {
             LoginView()
         } else {
-                mainInterfaceView
+            mainInterfaceView
         }
     }
 }
@@ -36,15 +36,10 @@ extension ContentView {
     
     var mainInterfaceView: some View {
         ZStack {
-            NavigationView{
-                ZStack{
-                    MainTabView2()
-                    
-                    NavigationLink("", isActive: $showMyProfile) {
-                        ProfileView(user: vmAuth.currentUser)
-                    }
-                }
-                    
+            
+            ZStack{
+                MainTabView2()
+                
             }
             .offset(x: vmAuth.showMenu ? 250 : 0, y:0)
             
@@ -69,12 +64,12 @@ extension ContentView {
                     SideMenuView { process in
                         if process == "profile" {
                             vmAuth.showMenu = false
-                            self.showMyProfile = true
+                            vmAuth.showProfile.toggle()
                         }
                     }
-                        .frame(width: 250)
-                        .background(Color.white)
-                        
+                    .frame(width: 250)
+                    .background(Color.white)
+                    
                     
                     Spacer()
                     

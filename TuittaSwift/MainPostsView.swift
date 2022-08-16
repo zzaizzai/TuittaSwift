@@ -15,60 +15,75 @@ struct MainPostsView: View {
     @EnvironmentObject var vmAuth: AuthViewModel
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            ScrollView{
-                VStack{
-                    Text("text")
-                    
-                    Divider()
-                    PostView()
-                    PostView()
-                    PostView()
+//        NavigationView {
+            ZStack(alignment: .bottomTrailing) {
+                ScrollView{
+                    VStack{
+                        Text("text")
+                        
+                        Divider()
+                        PostView()
+                        PostView()
+                        PostView()
+                        PostView()
+                        PostView()
+                        PostView()
+                    }
                 }
-            }
-            .navigationTitle("posts")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading:
-                                    VStack{
-                ZStack{
-                    WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 40, height: 40)
-                        .cornerRadius(100)
-                        .zIndex(1)
-                    
-                    Image(systemName: "person")
-                        .resizable()
-                        .background(Color.gray)
-                        .frame(width: 30, height: 30)
-                        .cornerRadius(100)
-                }
-                
-                .onTapGesture {
-                    withAnimation(.easeInOut) {
-                        vmAuth.showMenu = true
+                .navigationTitle("posts")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(leading:
+                                        VStack{
+                    ZStack{
+                        WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .cornerRadius(100)
+                            .zIndex(1)
+                        
+                        Image(systemName: "person")
+                            .resizable()
+                            .background(Color.gray)
+                            .frame(width: 30, height: 30)
+                            .cornerRadius(100)
                     }
                     
-                }
-            })
-            
-            Button {
-                self.showNewTweetView.toggle()
-            } label: {
-                Image(systemName: "plus")
-                    .resizable()
-                    .frame(width: 28, height: 28)
-                    .padding()
-            }
-            .background(Color.blue)
-            .foregroundColor(Color.white)
-            .clipShape(Circle())
-            .padding()
-            .fullScreenCover(isPresented: $showNewTweetView) {
-                NewPostView ()
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            vmAuth.showMenu = true
+                        }
+                        
+                    }
+                })
                 
-            }
+                Button {
+                    self.showNewTweetView.toggle()
+                } label: {
+                    Image(systemName: "plus")
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                        .padding()
+                        
+                }
+                .background(Color.blue)
+                .foregroundColor(Color.white)
+                .clipShape(Circle())
+                .padding()
+                .offset(x: 0, y: -50)
+                .fullScreenCover(isPresented: $showNewTweetView) {
+                    NewPostView ()
+                    
+                }
+                
+//                NavigationLink("", isActive: $vmAuth.showProfile) {
+//                    ProfileView(user: vmAuth.currentUser)
+//                }
+                
+                
+//            }
+            
+
 
         }
     }
@@ -120,7 +135,7 @@ struct PostView: View {
                                 }
                             Text("0")
                         }
-//                        .foregroundColor(Color.red)
+                        //                        .foregroundColor(Color.red)
                         
                         Spacer()
                     }
@@ -142,9 +157,9 @@ struct PostView: View {
 
 struct MainPostsView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView{
-            MainPostsView()
-                .environmentObject(AuthViewModel())
-        }
+        //        NavigationView{
+        MainPostsView()
+            .environmentObject(AuthViewModel())
+        //        }
     }
 }

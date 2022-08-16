@@ -12,30 +12,37 @@ struct MainTabView2: View {
     @EnvironmentObject var vmAuth: AuthViewModel
     
     var body: some View {
-        VStack{
-            if vmAuth.tabIndex == 0 {
-                MainPostsView()
-                
-            } else if vmAuth.tabIndex == 1 {
-                ExploreView()
-                
-            } else if vmAuth.tabIndex == 2 {
-                NotificationView()
-                
-            } else if vmAuth.tabIndex == 3 {
-                MainMessagesView()
-                
-            }
-            
-            
+        ZStack(alignment: .bottom) {
             VStack{
+                NavigationView{
+                    ZStack{
+                        if vmAuth.tabIndex == 0 {
+                            MainPostsView()
+                            
+                        } else if vmAuth.tabIndex == 1 {
+                            ExploreView()
+                            
+                        } else if vmAuth.tabIndex == 2 {
+                            NotificationView()
+                            
+                        } else if vmAuth.tabIndex == 3 {
+                            MainMessagesView()
+                            
+                        }
+                        
+                        //for the maintain the bottomtap after move to another page
+                        NavigationLink("", isActive: $vmAuth.showProfile) {
+                            ProfileView(user: vmAuth.currentUser)
+                        }
+                    }
+                    
+                    
+                }
+                    
+                    
                 
-                bottomTab
-                    .offset(x: 0, y: 50)
-                    .zIndex(1)
-                
-                bottomBackground
             }
+            bottomTab
         }
     }
     
@@ -102,7 +109,9 @@ struct MainTabView2: View {
                 
                 Spacer()
             }
-            .font(.system(size: 25))
+            .font(.system(size: 30))
+            .padding(.vertical, 8)
+            .background(Color.gray)
             
         }
         

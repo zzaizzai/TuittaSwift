@@ -20,6 +20,8 @@ class AuthViewModel: ObservableObject {
     @Published var showMenu : Bool = false
     @Published var tabIndex : Int = 0
     
+    @Published var showProfile : Bool = false
+    
     init() {
         self.userSession = Auth.auth().currentUser
         self.fetchUserData()

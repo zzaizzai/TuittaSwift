@@ -21,49 +21,77 @@ struct ChatMessagesView: View {
     
     @ObservedObject var vm : ChatMessagesViewModel
     
+    @State private var chatText : String = ""
+    
     init(chatUser: User?) {
         self.vm = ChatMessagesViewModel(chatUser: chatUser)
         
         
     }
     var body: some View {
-        ScrollView{
-            Text(vm.chatUser?.name ?? "chatUser name")
-            
-            HStack(alignment: .top) {
-                Spacer()
+        VStack {
+            ScrollView{
+                Text(vm.chatUser?.name ?? "chatUser name")
                 
-                Text("time")
-                    .foregroundColor(Color.gray)
+                HStack(alignment: .top) {
+                    Spacer()
+                    
+                    Text("time")
+                        .foregroundColor(Color.gray)
+                    
+                    Text("chat message")
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(Color.white)
+                        .background(Color.init(red: 0.2, green: 0.3, blue: 0.9))
+                        .cornerRadius(20)
+                }
+                .padding(.horizontal)
                 
-                Text("chat message")
-                    .fontWeight(.bold)
-                    .padding()
-                    .foregroundColor(Color.white)
-                    .background(Color.init(red: 0.2, green: 0.3, blue: 0.9))
-                    .cornerRadius(20)
+                HStack(alignment: .top) {
+                   
+                    
+                    Text("chat message")
+                        .fontWeight(.bold)
+                        .padding()
+                        .foregroundColor(Color.white)
+                        .background(Color.init(red: 0.3, green: 0.4, blue: 0.4))
+                        .cornerRadius(20)
+                    
+                    Text("time")
+                        .foregroundColor(Color.gray)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
-            
-            HStack(alignment: .top) {
-               
-                
-
-                
-                Text("chat message")
-                    .fontWeight(.bold)
+            HStack{
+                Image(systemName: "photo")
                     .padding()
-                    .foregroundColor(Color.white)
-                    .background(Color.init(red: 0.3, green: 0.4, blue: 0.4))
-                    .cornerRadius(20)
+                TextField("", text: $chatText)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(30)
                 
-                Text("time")
-                    .foregroundColor(Color.gray)
+                Button {
+                    
+                } label: {
+                    Text("send")
+                        .foregroundColor(Color.white)
+                        .padding()
+                        
+                       
+                }
+                .background(Color.blue)
+                .cornerRadius(20)
+                .padding()
                 
-                Spacer()
             }
-            .padding(.horizontal)
+            .background(Color.gray)
+            .padding(.bottom, 50)
         }
+        
+        
     }
 }
 
