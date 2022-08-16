@@ -21,7 +21,7 @@ struct ProfileView: View {
             ScrollView{
                 HStack{
                     ZStack{
-                        WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
+                        WebImage(url: URL(string: user?.profileImageUrl ?? "no image"))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 80, height: 80)
