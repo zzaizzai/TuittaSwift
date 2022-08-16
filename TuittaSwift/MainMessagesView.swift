@@ -14,13 +14,14 @@ struct MainMessagesView: View {
     
     var body: some View {
         ScrollView{
-            Divider()
-            MessageView(post: nil)
-            Divider()
-            MessageView(post: nil)
-            Divider()
-            MessageView(post: nil)
-            Divider()
+            ForEach(0..<10){ post in
+                MessageView(post: nil)
+                Divider()
+                MessageView(post: nil)
+                Divider()
+                MessageView(post: nil)
+                Divider()
+            }
         }
         .navigationBarTitle("Messsages")
         .navigationBarTitleDisplayMode(.inline)
