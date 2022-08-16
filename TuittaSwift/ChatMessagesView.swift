@@ -68,28 +68,29 @@ struct ChatMessagesView: View {
             HStack{
                 Image(systemName: "photo")
                     .padding()
-                TextField("", text: $chatText)
-                    .padding()
+                TextField("send a message", text: $chatText)
+                    .padding(.horizontal)
+                    .padding(.vertical, 15)
                     .background(Color.white)
                     .cornerRadius(30)
                 
                 Button {
                     
                 } label: {
-                    Text("send")
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 25))
                         .foregroundColor(Color.white)
-                        .padding()
                         
                        
                 }
-                .background(Color.blue)
-                .cornerRadius(20)
-                .padding()
+                .padding(.horizontal)
+                .padding(.vertical, 20)
                 
             }
             .background(Color.gray)
-            .padding(.bottom, 50)
+//            .padding(.bottom, 50)
         }
+        .navigationTitle("chat")
         
         
     }
