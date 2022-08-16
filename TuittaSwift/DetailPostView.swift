@@ -62,7 +62,25 @@ class DetailPostViewModel: ObservableObject {
                 return
             }
             
-            self.commentText = ""
+            
+            //notice 
+            
+            let noticeData = [
+                "type" : "comment",
+                "time" : Date(),
+                "userUid" : user.uid,
+                "postUid" : post.id,
+                "text" : self.commentText,
+            ] as [String:Any]
+            
+            Firestore.firestore().collection("notice").document(post.user.uid).collection("PostNotice").document().setData(noticeData) { errpr in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                
+                self.commentText = ""
+            }
         }
     }
 }
@@ -88,7 +106,7 @@ struct DetailPostView: View {
                         HStack(alignment: .top){
                             
                             ZStack{
-                                WebImage(url: URL(string: vm.post?.authorProfileUrl ?? ""))
+                                WebImage(url: URL(string: vm.post?.user.profileImageUrl ?? ""))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 60, height: 60)
@@ -104,11 +122,11 @@ struct DetailPostView: View {
                             
                             VStack(alignment: .leading){
                                 HStack{
-                                    Text(vm.post?.authorName ?? "user name")
+                                    Text(vm.post?.user.name ?? "user name")
                                         .fontWeight(.bold)
                                     Spacer()
                                 }
-                                Text(vm.post?.authorEmail ?? "user email")
+                                Text(vm.post?.user.email ?? "user email")
                                 
                             }
                             Spacer()

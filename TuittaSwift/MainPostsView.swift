@@ -13,6 +13,8 @@ class MainPostsViewModel: ObservableObject{
     
     @Published var posts = [Post]()
     
+    private let service = Service()
+    
     init() {
         self.fetchAllPosts()
     }
@@ -24,24 +26,13 @@ class MainPostsViewModel: ObservableObject{
                 let documentId = doc.documentID
                 let data = doc.data()
                 
-                self.getUserData(userUid: data["authorUid"] as! String) { userData in
+                
+                self.service.getUserData(userUid: data["authorUid"] as! String) { userData in
                     self.posts.insert(.init(documentId: documentId, user: userData, data: data), at: 0)
                 }
+                
             })
             
-        }
-        
-    }
-    
-    func getUserData(userUid: String, completion: @escaping (User)-> Void) {
-        
-        Firestore.firestore().collection("users").document(userUid).getDocument { snapshot, _ in
-            guard let documentId = snapshot?.documentID else { return }
-            guard let data = snapshot?.data() else { return }
-            
-            let userData = User(documentId: documentId, data: data)
-            
-            completion(userData)
         }
         
     }
@@ -132,7 +123,7 @@ struct PostView: View {
             HStack(alignment: .top){
                 
                 ZStack{
-                    WebImage(url: URL(string: post.authorProfileUrl))
+                    WebImage(url: URL(string: post.user.profileImageUrl))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 45, height: 45)
@@ -148,7 +139,7 @@ struct PostView: View {
                 
                 VStack(alignment: .leading){
                     HStack{
-                        Text(post.authorName)
+                        Text(post.user.name)
                             .fontWeight(.bold)
                         Spacer()
                         Text(post.time.dateValue(), style: .time)

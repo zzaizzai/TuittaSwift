@@ -88,3 +88,30 @@ struct Comment: Identifiable, Codable {
         self.user = user
     }
 }
+
+
+struct Notice: Identifiable, Codable {
+    
+    var id: String {documentId}
+    
+    let documentId: String
+    let postUid, userUid, text: String
+    let time: Timestamp
+    let type : String
+    
+    let user: User
+    let post: Post
+    
+    init(documentId: String,user: User, post: Post, data: [String:Any]) {
+        self.documentId = documentId
+        self.postUid = data["postUid"] as? String ?? "no postUid"
+        self.userUid = data["userUid"] as? String ?? "no userUid"
+        self.text = data["text"] as? String ?? "no text"
+        self.type = data["type"] as? String ?? "no type"
+        self.time = data["time"] as? Timestamp ?? Timestamp()
+        
+        self.user = user
+        self.post = post
+    }
+}
+
