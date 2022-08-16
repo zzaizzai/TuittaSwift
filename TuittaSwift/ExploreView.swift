@@ -7,8 +7,34 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Firebase
+
+class ExploreViewModel : ObservableObject {
+    
+    @Published var allUsers = [User]()
+    
+    init(){
+        fetchAllUsersData()
+    }
+    
+    
+    func fetchAllUsersData() {
+        Firestore.firestore().collection("users").getDocuments { snapshots, _ in
+            snapshots?.documents.forEach({ doc in
+                let documentId = doc.documentID
+                let data = doc.data()
+                
+                self.allUsers.insert(.init(documentId: documentId, data: data), at: 0)
+            })
+        }
+        
+        
+    }
+}
 
 struct ExploreView: View {
+    
+    @ObservedObject var vm = ExploreViewModel()
     
     @EnvironmentObject var vmAuth: AuthViewModel
     
@@ -16,9 +42,14 @@ struct ExploreView: View {
         ScrollView{
             Text("show all users")
             
-            NavigationLink("", isActive: $vmAuth.showProfile) {
-                ProfileView(user: vmAuth.currentUser)
+            Divider()
+            
+            ForEach(vm.allUsers) { user in
+                ExploreUserProfileView(user: user)
+                
             }
+            
+            
         }
         .navigationBarTitle("explore")
         .navigationBarTitleDisplayMode(.inline)
@@ -46,12 +77,72 @@ struct ExploreView: View {
                 
             }
         })
+        
+        
+    }
+}
+
+struct ExploreUserProfileView: View{
+    
+    let user : User
+    @State private var showProfile = false
+    var body: some View{
+        LazyVStack {
+            HStack(alignment: .top) {
+                
+                ZStack{
+                    WebImage(url: URL(string: user.profileImageUrl))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(100)
+                        .zIndex(1)
+                    
+                    Image(systemName: "person")
+                        .resizable()
+                        .background(Color.gray)
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(100)
+                }
+                
+                VStack(alignment: .leading) {
+                    HStack{
+                        VStack(alignment: .leading) {
+                            Text(user.name)
+                                .fontWeight(.bold)
+                            
+                            Text(user.email)
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.gray)
+                        }
+                        
+                        Spacer()
+                        
+                        Text("")
+                    }
+                    
+                    Text("profile text")
+                }
+                NavigationLink("", isActive: $showProfile) {
+                    ProfileView(user: self.user)
+                }
+            }
+            .padding(.horizontal)
+            
+            Divider()
+        }
+        .onTapGesture {
+            self.showProfile.toggle()
+        }
+        
     }
 }
 
 struct ExploreView_Previews: PreviewProvider {
     static var previews: some View {
-        ExploreView()
-            .environmentObject(AuthViewModel())
+        NavigationView{
+            ExploreView()
+                .environmentObject(AuthViewModel())
+        }
     }
 }

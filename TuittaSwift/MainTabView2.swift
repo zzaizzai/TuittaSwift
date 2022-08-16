@@ -73,10 +73,17 @@ struct MainTabView2: View {
                 
                 if vmAuth.tabIndex == 0 {
                     Image(systemName: "person.fill")
+                        .onTapGesture {
+                            if vmAuth.showProfile {
+                                vmAuth.showProfile = false
+                            }
+                        }
                 } else {
                     Image(systemName: "person")
                         .onTapGesture {
+                            vmAuth.showProfile = false
                             vmAuth.tabIndex = 0
+                            
                         }
                 }
                 
@@ -85,10 +92,18 @@ struct MainTabView2: View {
                 
                 if vmAuth.tabIndex == 1 {
                     Image(systemName: "message.fill")
+                        .onTapGesture {
+                            if vmAuth.showProfile {
+                                vmAuth.showProfile = false
+                            }
+                        }
                 } else {
                     Image(systemName: "message")
                         .onTapGesture {
+                            vmAuth.showProfile = false
                             vmAuth.tabIndex = 1
+                            
+                            
                         }
                 }
                 
@@ -96,9 +111,16 @@ struct MainTabView2: View {
                 
                 if vmAuth.tabIndex == 2 {
                     Image(systemName: "bell.fill")
+                        .onTapGesture {
+                            if vmAuth.showProfile {
+                                vmAuth.showProfile = false
+                            }
+                        }
+                    
                 } else {
                     Image(systemName: "bell")
                         .onTapGesture {
+                            vmAuth.showProfile = false
                             vmAuth.tabIndex = 2
                         }
                 }
@@ -107,9 +129,15 @@ struct MainTabView2: View {
                 
                 if vmAuth.tabIndex == 3 {
                     Image(systemName: "envelope.fill")
+                        .onTapGesture {
+                            if vmAuth.showProfile {
+                                vmAuth.showProfile = false
+                            }
+                        }
                 } else {
                     Image(systemName: "envelope")
                         .onTapGesture {
+                            vmAuth.showProfile = false
                             vmAuth.tabIndex = 3
                         }
                 }
@@ -121,6 +149,7 @@ struct MainTabView2: View {
             .background(Color.gray)
             
         }
+
         
     }
 }
