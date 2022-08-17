@@ -9,27 +9,29 @@ import SwiftUI
 
 struct MainTabView2: View {
     
-    @EnvironmentObject var vmAuth: AuthViewModel
+    @State var tabIndex : Int = 0
+    
+    @EnvironmentObject var vmAuth : AuthViewModel
     
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack{
                 NavigationView{
                     ZStack{
-                        if vmAuth.tabIndex == 0 {
+                        if self.tabIndex == 0 {
 //                            NavigationView{
                                 MainPostsView()
 //                            }
                             
-                        } else if vmAuth.tabIndex == 1 {
+                        } else if self.tabIndex == 1 {
 //                            NavigationView{
                                 ExploreView()
 //                            }
                             
-                        } else if vmAuth.tabIndex == 2 {
+                        } else if self.tabIndex == 2 {
                             NotificationView()
                             
-                        } else if vmAuth.tabIndex == 3 {
+                        } else if self.tabIndex == 3 {
                             MainMessagesView()
                             
                         }
@@ -71,7 +73,7 @@ struct MainTabView2: View {
                 
                 Spacer()
                 
-                if vmAuth.tabIndex == 0 {
+                if self.tabIndex == 0 {
                     Image(systemName: "person.fill")
                         .onTapGesture {
                             if vmAuth.showProfile {
@@ -82,7 +84,7 @@ struct MainTabView2: View {
                     Image(systemName: "person")
                         .onTapGesture {
                             vmAuth.showProfile = false
-                            vmAuth.tabIndex = 0
+                            self.tabIndex = 0
                             
                         }
                 }
@@ -90,7 +92,7 @@ struct MainTabView2: View {
                 Spacer()
                 
                 
-                if vmAuth.tabIndex == 1 {
+                if self.tabIndex == 1 {
                     Image(systemName: "message.fill")
                         .onTapGesture {
                             if vmAuth.showProfile {
@@ -101,7 +103,7 @@ struct MainTabView2: View {
                     Image(systemName: "message")
                         .onTapGesture {
                             vmAuth.showProfile = false
-                            vmAuth.tabIndex = 1
+                            self.tabIndex = 1
                             
                             
                         }
@@ -109,7 +111,7 @@ struct MainTabView2: View {
                 
                 Spacer()
                 
-                if vmAuth.tabIndex == 2 {
+                if self.tabIndex == 2 {
                     Image(systemName: "bell.fill")
                         .onTapGesture {
                             if vmAuth.showProfile {
@@ -121,13 +123,13 @@ struct MainTabView2: View {
                     Image(systemName: "bell")
                         .onTapGesture {
                             vmAuth.showProfile = false
-                            vmAuth.tabIndex = 2
+                            self.tabIndex = 2
                         }
                 }
                 
                 Spacer()
                 
-                if vmAuth.tabIndex == 3 {
+                if self.tabIndex == 3 {
                     Image(systemName: "envelope.fill")
                         .onTapGesture {
                             if vmAuth.showProfile {
@@ -138,7 +140,7 @@ struct MainTabView2: View {
                     Image(systemName: "envelope")
                         .onTapGesture {
                             vmAuth.showProfile = false
-                            vmAuth.tabIndex = 3
+                            self.tabIndex = 3
                         }
                 }
                 
