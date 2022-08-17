@@ -59,6 +59,7 @@ struct ProfileView: View {
     
     @EnvironmentObject var vmAuth: AuthViewModel
     @ObservedObject var vm : ProfileViewModel
+    @Environment(\.dismiss) private var dismiss
     
     let user : User?
     
@@ -74,11 +75,7 @@ struct ProfileView: View {
     @State private var showChat = false
     var body: some View {
         VStack(alignment: .leading){
-//            Text(vm.errorMessage)
-//            Text(vm.profileUserUid ?? "no uid")
             ScrollView{
-                
-
                 VStack{
                     HStack{
                         ZStack{
@@ -188,7 +185,7 @@ struct ProfileView: View {
                 
                 if self.showPosts == "posts" {
                     ForEach(vm.myPosts){ post in
-                        PostView(currnetProfileUid: self.user?.uid ?? nil, post: post)
+                        PostView(post: post, currnetProfileUid: self.user?.uid ?? nil)
                     }
                 } else {
                     //liked posts
@@ -197,6 +194,7 @@ struct ProfileView: View {
             }
             
         }
+//        .navigationBarHidden(true)
     }
 }
 

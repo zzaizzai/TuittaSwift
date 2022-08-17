@@ -16,7 +16,9 @@ class MainMessagesViewModel : ObservableObject {
     
     
     init(){
-        fetchRecentMessages()
+        DispatchQueue.main.async {
+            self.fetchRecentMessages()
+        }
     }
     
     func fetchRecentMessages() {

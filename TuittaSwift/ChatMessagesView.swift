@@ -22,36 +22,40 @@ class ChatMessagesViewModel : ObservableObject{
     let service = Service()
     
     init(chatUser: User?) {
-        self.chatUser = chatUser
-        self.fetchMessages(chatUser: chatUser)
-        
-        
+        DispatchQueue.main.async {
+            self.chatUser = chatUser
+            self.fetchMessages(chatUser: chatUser)
+        }
     }
+    
+    
+    var firestoreListner : ListenerRegistration?
     
     
     func fetchMessages(chatUser: User? ){
         guard let myUser = Auth.auth().currentUser else { return }
         guard let chatUser = chatUser else { return }
         
-        Firestore.firestore().collection("messages").document(myUser.uid).collection(chatUser.uid).order(by: "time", descending: false) .getDocuments { snapshots, error in
+        firestoreListner?.remove()
+        
+        Firestore.firestore().collection("messages").document(myUser.uid).collection(chatUser.uid).order(by: "time", descending: false).addSnapshotListener { snapshots, error in
             if let error = error {
                 print(error)
                 return
             }
             
-            snapshots?.documents.forEach({ doc in
-                let docId = doc.documentID
-                let data = doc.data()
-                
-                guard let fromUid = data["fromUid"] as? String else { return }
-                
-                self.service.getUserData(userUid: fromUid) { fromUser in
-                    self.messages.append(.init(documentId: docId, fromUser: fromUser, data: data))
+            snapshots?.documentChanges.forEach({ change in
+                if change.type == .added {
+                    let docId = change.document.documentID
+                    let data = change.document.data()
+                    
+                    guard let fromUid = data["fromUid"] as? String else { return }
+                    
+                    self.service.getUserData(userUid: fromUid) { fromUser in
+                        self.messages.append(.init(documentId: docId, fromUser: fromUser, data: data))
+                    }
+                    
                 }
-                
-                
-                
-                
             })
         }
     }
