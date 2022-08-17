@@ -27,6 +27,8 @@ class DetailPostViewModel: ObservableObject {
     
     func fetchComments(post: Post? ) {
         
+        self.comments.removeAll()
+        
         guard let post = post else { return }
         
         Firestore.firestore().collection("posts").document(post.id).collection("comments").order(by: "time").getDocuments { snapshots, _ in
@@ -35,19 +37,24 @@ class DetailPostViewModel: ObservableObject {
                 let documentId = doc.documentID
                 let data = doc.data()
                 
-                guard let userUid = data["userUid"] as? String else { return }
-                
-                self.service.getUserData(userUid: userUid) { userData in
-                    self.comments.append(.init(documentId: documentId, user: userData, data: data))
-                }
+                self.comments.insert(.init(documentId: documentId, data: data), at: 0)
                
             })
+            
+            for i in 0 ..< self.comments.count {
+                let userUid = self.comments[i].userUid
+                
+                self.service.getUserData(userUid: userUid) { userData in
+                    self.comments[i].user = userData
+                }
+            }
         }
     }
     
     func replyComment(post: Post?, MyUser: User?) {
         
         guard let post = post else { return }
+        guard let postUser = post.user else { return }
         guard let user = MyUser else { return }
         
         
@@ -75,7 +82,7 @@ class DetailPostViewModel: ObservableObject {
                 "text" : self.commentText,
             ] as [String:Any]
             
-            Firestore.firestore().collection("notice").document(post.user.uid).collection("PostNotice").document().setData(noticeData) { errpr in
+            Firestore.firestore().collection("notice").document(postUser.uid).collection("PostNotice").document().setData(noticeData) { errpr in
                 if let error = error {
                     print(error)
                     return
@@ -140,7 +147,7 @@ struct DetailPostView: View {
                         HStack(alignment: .top){
                             
                             ZStack{
-                                WebImage(url: URL(string: vm.post.user.profileImageUrl))
+                                WebImage(url: URL(string: vm.post.user?.profileImageUrl ?? "no uid"))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 60, height: 60)
@@ -156,11 +163,11 @@ struct DetailPostView: View {
                             
                             VStack(alignment: .leading){
                                 HStack{
-                                    Text(vm.post.user.name)
+                                    Text(vm.post.user?.name ?? "no name")
                                         .fontWeight(.bold)
                                     Spacer()
                                 }
-                                Text(vm.post.user.email)
+                                Text(vm.post.user?.email ?? "no email")
                                 
                             }
                             Spacer()
@@ -288,7 +295,7 @@ struct DetailPostCommentView: View {
             HStack(alignment: .top){
                 
                 ZStack{
-                    WebImage(url: URL(string: comment.user.profileImageUrl))
+                    WebImage(url: URL(string: comment.user?.profileImageUrl ?? "no image"))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 45, height: 45)
@@ -304,7 +311,7 @@ struct DetailPostCommentView: View {
                 
                 VStack(alignment: .leading){
                     HStack{
-                        Text(comment.user.name)
+                        Text(comment.user?.name ?? "no name")
                             .fontWeight(.bold)
                         Spacer()
                         HStack{

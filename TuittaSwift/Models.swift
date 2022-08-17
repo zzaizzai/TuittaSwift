@@ -46,9 +46,9 @@ struct Post: Identifiable, Codable {
     
     var didLike: Bool = false
     
-    let user: User
+    var user: User?
     
-    init(documentId: String, user:User, data: [String:Any] ) {
+    init(documentId: String, data: [String:Any] ) {
         self.documentId = documentId
         self.authorUid = data["authorUid"] as? String ?? "no authorUid"
         self.authorEmail = data["authorEmail"] as? String ?? "no authorEmail"
@@ -60,7 +60,6 @@ struct Post: Identifiable, Codable {
         self.time = data["time"] as? Timestamp ?? Timestamp()
         self.likes = data["likes"] as? Int ?? 0
         
-        self.user = user
     }
 }
 
@@ -75,9 +74,9 @@ struct Comment: Identifiable, Codable {
     
     var liked : Bool = false
     
-    let user : User
+    var user : User?
     
-    init(documentId: String, user: User, data: [String:Any]) {
+    init(documentId: String, data: [String:Any]) {
         self.documentId = documentId
         self.userUid = data["userUid"] as? String ?? "no userUid"
         self.postUid = data["postUid"] as? String ?? "no postUid"
@@ -85,7 +84,6 @@ struct Comment: Identifiable, Codable {
         
         self.time = data["time"] as? Timestamp ?? Timestamp()
         
-        self.user = user
     }
 }
 

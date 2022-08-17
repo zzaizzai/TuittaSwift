@@ -28,30 +28,32 @@ class ProfileViewModel : ObservableObject {
     
     func fetchMyPosts() {
         guard let user = self.profileUser else { return }
-        
+
         Firestore.firestore().collection("posts").whereField("authorUid", isEqualTo: user.uid).order(by: "time").getDocuments { snapshots, error in
             if let error = error {
                 print(error)
                 self.errorMessage = "\(error)"
                 return
             }
-            
+
             snapshots?.documents.forEach({ doc in
                 let data = doc.data()
                 let docId = doc.documentID
                 
-                guard let userUid = data["authorUid"] as? String else {
-                    self.errorMessage = "2"
-                    return }
-                
-                self.service.getUserData(userUid: userUid) { userData in
-                    self.myPosts.insert(.init(documentId: docId, user: userData, data: data), at: 0)
-                    self.errorMessage = "done"
-                }
+                self.myPosts.insert(.init(documentId: docId, data: data), at: 0)
                 
             })
+            
+            for i in 0 ..< self.myPosts.count {
+                let userUid = self.myPosts[i].authorUid
+                
+                self.service.getUserData(userUid: userUid) { userData in
+                    self.myPosts[i].user = userData
+                }
+                
+            }
         }
-        
+
     }
 }
 

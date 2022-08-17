@@ -39,7 +39,8 @@ struct Service {
             guard let data = snpashot?.data() else { return }
             
             self.getUserData(userUid: data["authorUid"] as! String) { userData in
-                let postData = Post(documentId: documentId, user: userData, data: data)
+                var postData = Post(documentId: documentId, data: data)
+                postData.user = userData
                 
                 completion(postData)
             }
