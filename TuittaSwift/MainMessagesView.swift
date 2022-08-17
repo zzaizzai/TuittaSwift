@@ -7,22 +7,54 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Firebase
+
+class MainMessagesViewModel : ObservableObject {
+    
+    @Published var recentMessages = [Message]()
+    private let service = Service()
+    
+    
+    init(){
+        fetchRecentMessages()
+    }
+    
+    func fetchRecentMessages() {
+        guard let myUser = Auth.auth().currentUser else { return }
+        
+        Firestore.firestore().collection("users").document(myUser.uid).collection("recentMessages").getDocuments { snapshots, error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            snapshots?.documents.forEach({ doc in
+                let docId = doc.documentID
+                let data = doc.data()
+                
+                guard let chatUser = data["fromUid"] as? String else { return }
+                
+                self.service.getUserData(userUid: chatUser) { userData in
+                    self.recentMessages.append(.init(documentId: docId, fromUser: userData , data: data))
+                }
+            })
+        }
+    }
+}
 
 struct MainMessagesView: View {
     
+    
+    @ObservedObject var vm = MainMessagesViewModel()
     @EnvironmentObject var vmAuth: AuthViewModel
     
     var body: some View {
         ScrollView{
-            ForEach(0..<10){ post in
-                MessageView(post: nil)
-                Divider()
-                MessageView(post: nil)
-                Divider()
-                MessageView(post: nil)
-                Divider()
+            ForEach(vm.recentMessages){ message in
+                RecentMessageView(recentMessage: message)
             }
         }
+        .padding(.top, 5)
         .navigationBarTitle("Messsages")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(leading:
@@ -52,52 +84,54 @@ struct MainMessagesView: View {
     }
 }
 
-class MessageViewModel: ObservableObject {
-    @Published var post: Post?
-    
-    
-    init(post: Post?) {
-        self.post = post
-    }
+class RecentMessageViewModel: ObservableObject {
 }
 
-struct MessageView: View {
+struct RecentMessageView: View {
     
-    @ObservedObject var vm : MessageViewModel
+    let recentMessage : Message
+    @EnvironmentObject var vmAuth: AuthViewModel
     
-    init(post: Post?) {
-        self.vm = MessageViewModel(post: post)
-    }
     
     @State private var showMessage = false
     
     var body: some View {
         HStack(alignment: .top) {
-            Image(systemName: "person")
-                .resizable()
-                .background(Color.gray)
-                .frame(width: 50, height: 50)
-                .cornerRadius(100)
+            ZStack{
+                WebImage(url: URL(string: recentMessage.user.profileImageUrl))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .cornerRadius(100)
+                    .zIndex(1)
+                
+                Image(systemName: "person")
+                    .resizable()
+                    .background(Color.gray)
+                    .frame(width: 60, height: 60)
+                    .cornerRadius(100)
+            }
             
             VStack(alignment: .leading) {
                 HStack{
-                    Text(vm.post?.authorName ?? "author name")
+                    Text(recentMessage.user.name)
                         .fontWeight(.bold)
                     
                     Spacer()
                     
-                    Text("time")
+                    Text(recentMessage.time.dateValue(), style: .time)
                 }
-                Text(vm.post?.postText ?? "text text text text text text text text text text text text text text text text text text text text text ")
+                Text(recentMessage.chatText)
                     .foregroundColor(Color.gray)
                     .lineLimit(2)
             }
             
             NavigationLink("", isActive: $showMessage) {
-                ChatMessagesView(chatUser: vm.post?.user ?? nil)
+                ChatMessagesView(chatUser: recentMessage.user)
             }
             
         }
+        .background(Color.white)
         .padding(.horizontal)
         .onTapGesture {
             self.showMessage.toggle()
@@ -105,6 +139,7 @@ struct MessageView: View {
         }
     }
 }
+
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
