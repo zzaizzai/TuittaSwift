@@ -154,6 +154,7 @@ struct NoticeView: View {
             Divider()
             
         }
+        .background(Color.white)
         .onTapGesture {
             self.showPost = true
         }
