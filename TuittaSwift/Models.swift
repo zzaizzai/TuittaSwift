@@ -44,7 +44,7 @@ struct Post: Identifiable, Codable {
     let time: Timestamp
     var likes: Int
     
-    var didLike: Bool? = false
+    var didLike: Bool = false
     
     let user: User
     
