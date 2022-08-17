@@ -69,7 +69,7 @@ struct ExploreView: View {
                     .frame(width: 30, height: 30)
                     .cornerRadius(100)
             }
-            
+
             .onTapGesture {
                 withAnimation(.easeInOut) {
                     vmAuth.showMenu = true
@@ -131,6 +131,7 @@ struct ExploreUserProfileView: View{
             
             Divider()
         }
+        .background(Color.white)
         .onTapGesture {
             self.showProfile.toggle()
         }
