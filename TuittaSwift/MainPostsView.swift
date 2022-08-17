@@ -15,27 +15,36 @@ class MainPostsViewModel: ObservableObject{
     
     private let service = Service()
     
+    
     init() {
-        DispatchQueue.main.async {
-            self.fetchAllPosts()
-        }
+        self.fetchAllPosts()
     }
     
     
     func fetchAllPosts() {
+        
+        self.posts.removeAll()
+        
         Firestore.firestore().collection("posts").order(by: "time").addSnapshotListener { snapshot, _   in
             snapshot?.documentChanges.forEach({ change in
                 if change.type == .added {
                     let documentId = change.document.documentID
                     let data = change.document.data()
                     
-                    
-                    self.service.getUserData(userUid: data["authorUid"] as! String) { userData in
-                        self.posts.insert(.init(documentId: documentId, user: userData, data: data), at: 0)
-                    }
+                    self.posts.insert(.init(documentId: documentId, data: data), at: 0)
                 }
                 
             })
+            //fixed for correct indexing
+            for i in 0 ..< self.posts.count {
+                let uid = self.posts[i].authorUid
+                
+                self.service.getUserData(userUid: uid) { userData in
+                    self.posts[i].user = userData
+                    
+                    
+                }
+            }
             
         }
         
@@ -130,15 +139,19 @@ class PostRowViewModel : ObservableObject {
     
     func checkNumberComment () {
         
-        self.numberComment = 0
         
-        
-        Firestore.firestore().collection("posts").document(self.post.id).collection("comments").getDocuments { snpahsot, _ in
-            snpahsot?.documents.forEach({ doc in
-                if doc.exists {
+        Firestore.firestore().collection("posts").document(self.post.id).collection("comments").addSnapshotListener { snapahsot, _ in
+            
+            snapahsot?.documentChanges.forEach({ change in
+                if change.type == .added {
                     self.numberComment += 1
                 }
+                
+                if change.type == .removed {
+                    self.numberComment -= 1
+                }
             })
+            
         }
     }
     
@@ -236,14 +249,14 @@ struct PostRowView: View {
 //                Text(vm.error)
                 
                 ZStack{
-                    WebImage(url: URL(string: vm.post.user.profileImageUrl))
+                    WebImage(url: URL(string: vm.post.user?.profileImageUrl ?? "no url"))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 45, height: 45)
                         .cornerRadius(100)
                         .zIndex(1)
                         .onTapGesture {
-                            if currnetProfileUid != vm.post.user.uid {
+                            if currnetProfileUid != vm.post.user?.uid {
                                 self.showProfile = true
                             }
                         }
@@ -261,7 +274,7 @@ struct PostRowView: View {
                 
                 VStack(alignment: .leading){
                     HStack{
-                        Text(vm.post.user.name)
+                        Text(vm.post.user?.name ?? "no name")
                             .fontWeight(.bold)
                         Spacer()
                         Text(vm.post.time.dateValue(), style: .time)

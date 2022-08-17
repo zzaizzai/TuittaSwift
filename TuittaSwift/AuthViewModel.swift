@@ -128,6 +128,7 @@ class AuthViewModel: ObservableObject {
         self.userSession = nil
         self.currentUser = nil
         self.errorMessage = "logout done"
+        self.showMenu = false
     }
     
     func register(email: String, password: String, name: String, profileImage: UIImage, completion: @escaping(Bool) -> Void) {
