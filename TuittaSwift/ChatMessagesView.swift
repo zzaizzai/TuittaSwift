@@ -10,25 +10,7 @@ import Firebase
 import SDWebImageSwiftUI
 
 
-struct Message: Identifiable, Codable {
-    
-    var id: String {documentId}
-    
-    let documentId: String
-    let chatText, fromUid : String
-    let time : Timestamp
-    
-    let user: User
-    
-    init(documentId: String, fromUser: User, data: [String:Any]) {
-        self.documentId = documentId
-        self.chatText = data["chatText"] as? String ?? "no chatText"
-        self.fromUid = data["fromUid"] as? String ?? "no fromUid"
-        self.time = data["time"] as? Timestamp ?? Timestamp()
-        
-        self.user = fromUser
-    }
-}
+
 
 
 class ChatMessagesViewModel : ObservableObject{
@@ -51,7 +33,7 @@ class ChatMessagesViewModel : ObservableObject{
         guard let myUser = Auth.auth().currentUser else { return }
         guard let chatUser = chatUser else { return }
         
-        Firestore.firestore().collection("messages").document(myUser.uid).collection(chatUser.uid).order(by: "time").getDocuments { snapshots, error in
+        Firestore.firestore().collection("messages").document(myUser.uid).collection(chatUser.uid).order(by: "time", descending: false) .getDocuments { snapshots, error in
             if let error = error {
                 print(error)
                 return
@@ -64,7 +46,7 @@ class ChatMessagesViewModel : ObservableObject{
                 guard let fromUid = data["fromUid"] as? String else { return }
                 
                 self.service.getUserData(userUid: fromUid) { fromUser in
-                    self.messages.insert(.init(documentId: docId, fromUser: fromUser, data: data), at: 0)
+                    self.messages.append(.init(documentId: docId, fromUser: fromUser, data: data))
                 }
                 
                 
@@ -79,7 +61,34 @@ class ChatMessagesViewModel : ObservableObject{
         guard let chatUser = self.chatUser else { return}
         
         
+        
+        
+        //recent message
+        let myRecentMessage = [
+            "chatText": self.chatText,
+            "fromUid": chatUser.uid,
+            "time": Date(),
+        ] as [String : Any]
+        
+        Firestore.firestore().collection("users").document(myUser.uid).collection("recentMessages").document(chatUser.uid).setData(myRecentMessage) { _ in
+            
+        }
+        
+        let yourRecentMessage = [
+            "chatText": self.chatText,
+            "fromUid": myUser.uid,
+            "time": Date(),
+        ] as [String : Any]
+        
+        Firestore.firestore().collection("users").document(chatUser.uid).collection("recentMessages").document(myUser.uid).setData(yourRecentMessage) { _ in
+            
+        }
+        
+        
+        
+        
         //my user DB
+        //chat Messages
         let myMessageData = [
             "chatText": self.chatText,
             "fromUid": myUser.uid,
@@ -109,6 +118,7 @@ class ChatMessagesViewModel : ObservableObject{
             }
         }
     }
+    
 }
 
 struct ChatMessagesView: View {

@@ -115,3 +115,22 @@ struct Notice: Identifiable, Codable {
     }
 }
 
+struct Message: Identifiable, Codable {
+    
+    var id: String {documentId}
+    
+    let documentId: String
+    let chatText, fromUid : String
+    let time : Timestamp
+    
+    let user: User
+    
+    init(documentId: String, fromUser: User, data: [String:Any]) {
+        self.documentId = documentId
+        self.chatText = data["chatText"] as? String ?? "no chatText"
+        self.fromUid = data["fromUid"] as? String ?? "no fromUid"
+        self.time = data["time"] as? Timestamp ?? Timestamp()
+        
+        self.user = fromUser
+    }
+}
