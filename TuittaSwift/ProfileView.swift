@@ -71,7 +71,7 @@ struct ProfileView: View {
         
         
     }
-    
+    @State private var showChat = false
     var body: some View {
         VStack(alignment: .leading){
 //            Text(vm.errorMessage)
@@ -102,7 +102,7 @@ struct ProfileView: View {
                             Text("")
                         } else {
                             Button {
-                                //show chat message
+                                self.showChat = true
                             } label: {
                                 Image(systemName: "envelope")
                                     .foregroundColor(Color.white)
@@ -111,6 +111,10 @@ struct ProfileView: View {
                             .frame(width: 45, height: 45)
                             .background(Color.gray)
                             .cornerRadius(50)
+                            
+                            NavigationLink("", isActive: $showChat) {
+                                ChatMessagesView(chatUser: self.user)
+                            }
                             
                         }
                     }
