@@ -58,7 +58,7 @@ struct MainPostsView: View {
                         Spacer()
                     }
                     ForEach(vm.posts){ post in
-                        PostView(post: post, currnetProfileUid: nil)
+                        PostRowView(post: post, currnetProfileUid: nil)
                     }
                 }
             }
@@ -111,12 +111,13 @@ struct MainPostsView: View {
     }
 }
 
-class PostViewModel : ObservableObject {
+class PostRowViewModel : ObservableObject {
     
     @Published var post : Post
-    
+    let service = Service()
     @Published var numberComment : Int = 0
     
+    @Published var error = "error"
     
     
     init (post: Post) {
@@ -128,6 +129,10 @@ class PostViewModel : ObservableObject {
     
     
     func checkNumberComment () {
+        
+        self.numberComment = 0
+        
+        
         Firestore.firestore().collection("posts").document(self.post.id).collection("comments").getDocuments { snpahsot, _ in
             snpahsot?.documents.forEach({ doc in
                 if doc.exists {
@@ -139,75 +144,87 @@ class PostViewModel : ObservableObject {
     
     func checkLiked() {
         
+        
         guard let myUser = Auth.auth().currentUser else { return }
         
-        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").getDocuments { snapshot, _ in
-            snapshot?.documents.forEach({ doc in
-                if doc.exists {
-                    self.post.likes = self.post.likes + 1
+        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").addSnapshotListener { snapshot, _ in
+            
+            snapshot?.documentChanges.forEach({ change in
+                if change.type == .added {
+                    self.post.likes += 1
+                }
+                
+                if change.type == .removed {
+                    self.post.likes -= 1
                 }
             })
         }
         
-        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).getDocument { snapshot, _ in
-            guard let data = snapshot?.data() else { return }
-            
-            if !data.isEmpty {
-                self.post.didLike = true
+        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).addSnapshotListener { snapshot, error in
+            if let error = error {
+                self.error = "dsed\(error)"
+                return
             }
+            
+            guard let data = snapshot?.data() else {
+                self.post.didLike = false
+                return }
+            
+            self.post.didLike = true
+            print("\(data)")
+            
+            
+            
         }
     }
     
-    func likeButton() {
+    
+    func unlikeThisPost() {
+        
         
         guard let myUser = Auth.auth().currentUser else { return }
         
-        if self.post.didLike {
-            
-            
-            Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).delete()
-            
-            self.post.didLike = false
-            self.post.likes -= 1
-            
-            
-        } else {
-            
-            
-            let likeData = [
-                "postUid" : self.post.id,
-                "userUid" : myUser.uid,
-                "time" : Date(),
-            ] as [String:Any]
-            
-            Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).setData(likeData) { error in
-                if let error = error {
-                    print(error)
-                    return
-                }
+        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).delete()
+        
+//        self.post.didLike = false
+    }
+    
+    func likeThisPost() {
+        
+        guard let myUser = Auth.auth().currentUser else { return }
+        
+        
+        let likeData = [
+            "postUid" : self.post.id,
+            "userUid" : myUser.uid,
+            "time" : Date(),
+        ] as [String:Any]
+        
+        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).setData(likeData) { error in
+            if let error = error {
+                print(error)
+                return
                 
-                self.post.didLike = true
-                self.post.likes += 1
             }
+            
+//            self.post.didLike = true
         }
     }
     
 }
 
 
-struct PostView: View {
+struct PostRowView: View {
     
     @State private var showDetailPost = false
     @State private var showProfile = false
-    @ObservedObject var vm  : PostViewModel
+    @ObservedObject var vm  : PostRowViewModel
     
     let currnetProfileUid : String?
     
-    //    let post : Post
-    
     init(post: Post, currnetProfileUid : String?) {
         //        self.post = post
-        self.vm = PostViewModel(post: post)
+        self.vm = PostRowViewModel(post: post)
         self.currnetProfileUid = currnetProfileUid
         
         
@@ -216,6 +233,7 @@ struct PostView: View {
     var body: some View {
         LazyVStack(alignment: .leading){
             HStack(alignment: .top){
+//                Text(vm.error)
                 
                 ZStack{
                     WebImage(url: URL(string: vm.post.user.profileImageUrl))
@@ -238,8 +256,6 @@ struct PostView: View {
                         .frame(width: 45, height: 45)
                         .background(Color.gray)
                         .cornerRadius(100)
-                    
-                    
                     
                 }
                 
@@ -277,17 +293,18 @@ struct PostView: View {
                                 Image(systemName: "heart.fill")
                                     .onTapGesture {
                                         print("like it")
-                                        vm.likeButton()
+                                        vm.unlikeThisPost()
                                     }
                                 Text(vm.post.likes.description)
                             }
                             .foregroundColor(Color.red)
                             
+                            
                         } else {
                             Image(systemName: "heart")
                                 .onTapGesture {
                                     print("like it")
-                                    vm.likeButton()
+                                    vm.likeThisPost()
                                 }
                             Text(vm.post.likes.description)
                         }
@@ -302,10 +319,6 @@ struct PostView: View {
                 Text("...")
             }
             .padding(.horizontal)
-            
-            
-            
-            
             
             Divider()
         }

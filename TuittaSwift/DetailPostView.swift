@@ -16,11 +16,11 @@ class DetailPostViewModel: ObservableObject {
     private let service = Service()
     @Published var comments = [Comment]()
     
-    @Published var post : Post?
+    @Published var post : Post
     
     @Published var commentText : String = ""
     
-    init(post: Post?){
+    init(post: Post){
         self.post = post
         fetchComments(post: post)
     }
@@ -85,6 +85,38 @@ class DetailPostViewModel: ObservableObject {
             }
         }
     }
+    
+    func unlikeThisPost() {
+        
+        
+        guard let myUser = Auth.auth().currentUser else { return }
+        
+        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).delete()
+        
+        self.post.didLike = false
+    }
+    
+    func likeThisPost() {
+        
+        guard let myUser = Auth.auth().currentUser else { return }
+        
+        
+        let likeData = [
+            "postUid" : self.post.id,
+            "userUid" : myUser.uid,
+            "time" : Date(),
+        ] as [String:Any]
+        
+        Firestore.firestore().collection("posts").document(self.post.id).collection("liked").document(myUser.uid).setData(likeData) { error in
+            if let error = error {
+                print(error)
+                return
+                
+            }
+            
+            self.post.didLike = true
+        }
+    }
 }
 
 
@@ -94,7 +126,7 @@ struct DetailPostView: View {
     @EnvironmentObject var vmAuth: AuthViewModel
     
     
-    init(post: Post?) {
+    init(post: Post) {
         self.vm = DetailPostViewModel(post: post)
         
     }
@@ -108,7 +140,7 @@ struct DetailPostView: View {
                         HStack(alignment: .top){
                             
                             ZStack{
-                                WebImage(url: URL(string: vm.post?.user.profileImageUrl ?? ""))
+                                WebImage(url: URL(string: vm.post.user.profileImageUrl))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 60, height: 60)
@@ -124,11 +156,11 @@ struct DetailPostView: View {
                             
                             VStack(alignment: .leading){
                                 HStack{
-                                    Text(vm.post?.user.name ?? "user name")
+                                    Text(vm.post.user.name)
                                         .fontWeight(.bold)
                                     Spacer()
                                 }
-                                Text(vm.post?.user.email ?? "user email")
+                                Text(vm.post.user.email)
                                 
                             }
                             Spacer()
@@ -136,14 +168,19 @@ struct DetailPostView: View {
                             Text("...")
                         }
                         
-                        Text(vm.post?.postText ?? "post text")
+                        Text(vm.post.postText)
                             .font(.title)
                         
                         HStack{
-                            Text(vm.post?.time.dateValue() ?? Date(), style: .time)
-                            Text(vm.post?.time.dateValue() ?? Date(), style: .date)
+                            Text(vm.post.time.dateValue(), style: .time)
+                            Text(vm.post.time.dateValue(), style: .date)
                         }
                         .foregroundColor(Color.gray)
+                        
+                        Divider()
+                        
+                        Text("Likes: \(vm.post.likes.description)")
+                            .bold()
                         
                         Divider()
                     }
@@ -168,12 +205,24 @@ struct DetailPostView: View {
                             }
                         
                         Spacer()
-                        
-                        Group{
-                            Image(systemName: "heart")
-                                .onTapGesture {
-                                    print("like it")
-                                }
+//
+                        if vm.post.didLike {
+                            Group{
+                                Image(systemName: "heart.fill")
+                                    .onTapGesture {
+                                        vm.unlikeThisPost()
+                                    }
+                            }
+                            .foregroundColor(Color.red)
+
+
+                        } else {
+                            Group{
+                                Image(systemName: "heart")
+                                    .onTapGesture {
+                                        vm.likeThisPost()
+                                    }
+                            }
                         }
                         
                         Spacer()
@@ -266,34 +315,6 @@ struct DetailPostCommentView: View {
                     
                     Text(comment.commentText)
                     
-                    HStack{
-                        Image(systemName: "message")
-                            .onTapGesture {
-                                print("comment")
-                            }
-                        Text("0")
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrow.2.squarepath")
-                            .onTapGesture {
-                                print("repost")
-                            }
-                        Text("0")
-                        
-                        Spacer()
-                        
-                        Group{
-                            Image(systemName: "heart")
-                                .onTapGesture {
-                                    print("like it")
-                                }
-                            Text("0")
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.vertical, 1)
                 }
                 
                 Spacer()
