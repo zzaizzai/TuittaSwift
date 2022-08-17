@@ -40,7 +40,6 @@ struct ExploreView: View {
     
     var body: some View {
         ScrollView{
-            Text("show all users")
             
             Divider()
             

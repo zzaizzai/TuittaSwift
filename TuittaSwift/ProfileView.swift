@@ -185,7 +185,7 @@ struct ProfileView: View {
                 
                 if self.showPosts == "posts" {
                     ForEach(vm.myPosts){ post in
-                        PostView(post: post, currnetProfileUid: self.user?.uid ?? nil)
+                        PostRowView(post: post, currnetProfileUid: self.user?.uid ?? nil)
                     }
                 } else {
                     //liked posts
