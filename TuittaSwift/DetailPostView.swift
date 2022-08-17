@@ -35,7 +35,9 @@ class DetailPostViewModel: ObservableObject {
                 let documentId = doc.documentID
                 let data = doc.data()
                 
-                self.service.getUserData(userUid: post.authorUid) { userData in
+                guard let userUid = data["userUid"] as? String else { return }
+                
+                self.service.getUserData(userUid: userUid) { userData in
                     self.comments.append(.init(documentId: documentId, user: userData, data: data))
                 }
                
@@ -43,10 +45,10 @@ class DetailPostViewModel: ObservableObject {
         }
     }
     
-    func replyComment(post: Post?, user: User?) {
+    func replyComment(post: Post?, MyUser: User?) {
         
         guard let post = post else { return }
-        guard let user = user else { return }
+        guard let user = MyUser else { return }
         
         
         let data = [
@@ -213,7 +215,7 @@ struct DetailPostView: View {
                 
             } else {
                 Button {
-                    vm.replyComment(post: vm.post, user: vmAuth.currentUser)
+                    vm.replyComment(post: vm.post, MyUser: vmAuth.currentUser)
                     
                 } label: {
                     Image(systemName: "paperplane")

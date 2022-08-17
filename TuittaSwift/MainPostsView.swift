@@ -54,7 +54,7 @@ struct MainPostsView: View {
                             Spacer()
                         }
                         ForEach(vm.posts){ post in
-                            PostView(post: post)
+                            PostView(currnetProfileUid: nil, post: post)
                         }
                     }
                 }
@@ -115,6 +115,9 @@ struct MainPostsView: View {
 struct PostView: View {
     
     @State private var showDetailPost = false
+    @State private var showProfile = false
+    
+    let currnetProfileUid : String?
     
     let post : Post
     
@@ -129,11 +132,20 @@ struct PostView: View {
                         .frame(width: 45, height: 45)
                         .cornerRadius(100)
                         .zIndex(1)
+                        .onTapGesture {
+                            if currnetProfileUid != post.user.uid {
+                                self.showProfile = true
+                            }
+                        }
                     
                     Image(systemName: "person")
                         .frame(width: 45, height: 45)
                         .background(Color.gray)
                         .cornerRadius(100)
+                    
+                    NavigationLink("", isActive: $showProfile) {
+                        ProfileView(user: post.user)
+                    }
                     
                 }
                 
@@ -190,6 +202,7 @@ struct PostView: View {
             
             Divider()
         }
+        .background(Color.white)
         .onTapGesture {
             self.showDetailPost = true
         }
