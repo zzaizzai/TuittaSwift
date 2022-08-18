@@ -38,19 +38,21 @@ class NotificationViewModel: ObservableObject {
                 let documentId = doc.documentID
                 let data = doc.data()
                 
-                guard let userUid = data["userUid"] as? String else {
-                    self.errorMessages = "error user Uid"
-                    return }
-                guard let postUid = data["postUid"] as? String else {
-                    self.errorMessages = "error post Uid"
-                    return }
+                self.notices.insert(.init(documentId: documentId, data: data), at: 0)
                 
-                self.service.getUserData(userUid: userUid ) { userData in
-                    self.service.getPostData(postUid: postUid ) { postData in
-                        self.errorMessages = "fetch done"
-                        self.notices.insert(.init(documentId: documentId, user: userData, post: postData, data: data), at: 0)
+                for i in 0 ..< self.notices.count {
+                    let userUid = self.notices[i].userUid
+                    let postUid = self.notices[i].postUid
+                    
+                    self.service.getUserData(userUid: userUid) { userData in
+                        self.notices[i].user = userData
+                    }
+                    self.service.getPostData(postUid: postUid) { postData in
+                        self.notices[i].post = postData
                     }
                 }
+                
+                
             })
         }
         
@@ -113,13 +115,17 @@ struct NoticeView: View {
     
     let notice : Notice
     
+    init(notice: Notice){
+        self.notice = notice
+    }
+    
     @State private var showPost = false
     
     var body: some View {
         VStack {
             HStack(alignment: .top) {
                 ZStack{
-                    WebImage(url: URL(string: notice.user.profileImageUrl))
+                    WebImage(url: URL(string: notice.user?.profileImageUrl ?? "no profile image"))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 50, height: 50)
@@ -135,7 +141,7 @@ struct NoticeView: View {
                 
                 VStack(alignment: .leading) {
                     HStack{
-                        Text(notice.user.name)
+                        Text(notice.user?.name ?? "no name")
                             .fontWeight(.bold)
                         
                         Spacer()
@@ -146,7 +152,10 @@ struct NoticeView: View {
                 }
                 
                 NavigationLink("", isActive: $showPost) {
-                    DetailPostView(post: notice.post)
+                    if let post = self.notice.post {
+                        DetailPostView(post: post)
+                    }
+                    
                 }
             }
             .padding(.horizontal)
