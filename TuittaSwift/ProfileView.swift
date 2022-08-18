@@ -16,6 +16,7 @@ class ProfileViewModel : ObservableObject {
     @Published var errorMessage = "error"
     
     @Published var myPosts = [Post]()
+    @Published var likedPosts = [Post]()
     
     let profileUser : User?
     
