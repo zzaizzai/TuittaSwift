@@ -58,7 +58,7 @@ struct MainMessagesView: View {
                 RecentMessageView(recentMessage: message)
             }
         }
-        .padding(.top, 5)
+//        .padding(.top, 5)
         .navigationBarTitle("Messsages")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarItems(leading:
@@ -85,6 +85,52 @@ struct MainMessagesView: View {
                 
             }
         })
+        .safeAreaInset(edge: .top) {
+            navBar
+        }
+    }
+    
+    private var navBar : some View {
+        
+        ZStack{
+            
+            HStack{
+                
+                ZStack{
+                    WebImage(url: URL(string: vmAuth.currentUser?.profileImageUrl ?? "no image"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(100)
+                        .zIndex(1)
+                    
+                    Image(systemName: "person")
+                        .resizable()
+                        .background(Color.gray)
+                        .frame(width: 30, height: 30)
+                        .cornerRadius(100)
+                }
+                .padding()
+                .onTapGesture {
+                    withAnimation(.easeInOut) {
+                        vmAuth.showMenu = true
+                    }
+                }
+                
+                
+                Spacer()
+                
+            }
+            
+            
+            Text("messages")
+                .fontWeight(.bold)
+        }
+        .frame(width: .infinity, height: 50)
+        .background(Color.init(white: 0.9))
+        
+        
+        
     }
 }
 
@@ -100,6 +146,8 @@ struct RecentMessageView: View {
     @State private var showMessage = false
     
     var body: some View {
+        
+        
         HStack(alignment: .top) {
             ZStack{
                 WebImage(url: URL(string: recentMessage.user?.profileImageUrl ?? "profile"))
@@ -135,22 +183,29 @@ struct RecentMessageView: View {
             }
             
         }
+        .navigationBarHidden(true)
         .background(Color.white)
         .padding(.horizontal)
         .onTapGesture {
             self.showMessage.toggle()
-
+            
+            
+            
         }
+        
+
     }
+    
+
 }
 
 
 struct MainMessagesView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView{
+//        NavigationView{
             MainMessagesView()
                 .environmentObject(AuthViewModel())
-        }
+//        }
     }
 }
 
