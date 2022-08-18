@@ -25,6 +25,15 @@ class DetailPostViewModel: ObservableObject {
         fetchComments(post: post)
     }
     
+    func deletePost(done: @escaping (Bool)->() ) {
+        
+        let post = self.post
+        
+        Firestore.firestore().collection("posts").document(post.id).delete()
+        
+        done(true)
+    }
+    
     func fetchComments(post: Post? ) {
         
         self.comments.removeAll()
@@ -38,7 +47,7 @@ class DetailPostViewModel: ObservableObject {
                 let data = doc.data()
                 
                 self.comments.insert(.init(documentId: documentId, data: data), at: 0)
-               
+                
             })
             
             for i in 0 ..< self.comments.count {
@@ -72,7 +81,7 @@ class DetailPostViewModel: ObservableObject {
             }
             
             
-            //notice 
+            //notice
             
             let noticeData = [
                 "type" : "comment",
@@ -132,6 +141,9 @@ struct DetailPostView: View {
     @ObservedObject var vm : DetailPostViewModel
     @EnvironmentObject var vmAuth: AuthViewModel
     
+    @State private var showMenuOfPost = false
+    @Environment(\.dismiss) private var dismiss
+    
     
     init(post: Post) {
         self.vm = DetailPostViewModel(post: post)
@@ -139,121 +151,214 @@ struct DetailPostView: View {
     }
     
     var body: some View {
-        VStack{
-            ScrollView{
-                
-                LazyVStack(alignment: .leading){
-                    VStack(alignment: .leading) {
-                        HStack(alignment: .top){
-                            
-                            ZStack{
-                                WebImage(url: URL(string: vm.post.user?.profileImageUrl ?? "no uid"))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 60, height: 60)
-                                    .cornerRadius(100)
-                                    .zIndex(1)
-                                
-                                Image(systemName: "person")
-                                    .frame(width: 60, height: 60)
-                                    .background(Color.gray)
-                                    .cornerRadius(100)
-                                
+        ZStack {
+            
+            
+            
+            VStack{
+                ScrollView{
+                    
+                    ZStack(alignment: .trailing ) {
+                        
+                        
+                        ZStack{
+                            if self.showMenuOfPost {
+                                tapmenu
+                                    .offset(x: -40, y: -50)
+                                    .zIndex(3)
                             }
-                            
-                            VStack(alignment: .leading){
-                                HStack{
-                                    Text(vm.post.user?.name ?? "no name")
-                                        .fontWeight(.bold)
+                        }
+                        .animation(.easeInOut , value: showMenuOfPost)
+                        
+                        
+                        LazyVStack(alignment: .leading){
+                            VStack(alignment: .leading) {
+                                HStack(alignment: .top){
+                                    
+                                    ZStack{
+                                        WebImage(url: URL(string: vm.post.user?.profileImageUrl ?? "no uid"))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 60, height: 60)
+                                            .cornerRadius(100)
+                                            .zIndex(1)
+                                        
+                                        Image(systemName: "person")
+                                            .frame(width: 60, height: 60)
+                                            .background(Color.gray)
+                                            .cornerRadius(100)
+                                        
+                                    }
+                                    
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text(vm.post.user?.name ?? "no name")
+                                                .fontWeight(.bold)
+                                            Spacer()
+                                        }
+                                        Text(vm.post.user?.email ?? "no email")
+                                        
+                                    }
                                     Spacer()
+                                    
+                                    Text("...")
+                                        .onTapGesture {
+                                            self.showMenuOfPost.toggle()
+                                        }
                                 }
-                                Text(vm.post.user?.email ?? "no email")
                                 
+                                Text(vm.post.postText)
+                                    .font(.title)
+                                
+                                HStack{
+                                    Text(vm.post.time.dateValue(), style: .time)
+                                    Text(vm.post.time.dateValue(), style: .date)
+                                }
+                                .foregroundColor(Color.gray)
+                                
+                                Divider()
+                                
+                                Text("Likes: \(vm.post.likes.description)")
+                                    .bold()
+                                
+                                Divider()
                             }
-                            Spacer()
+                            .padding(.horizontal)
                             
-                            Text("...")
-                        }
-                        
-                        Text(vm.post.postText)
-                            .font(.title)
-                        
-                        HStack{
-                            Text(vm.post.time.dateValue(), style: .time)
-                            Text(vm.post.time.dateValue(), style: .date)
-                        }
-                        .foregroundColor(Color.gray)
-                        
-                        Divider()
-                        
-                        Text("Likes: \(vm.post.likes.description)")
-                            .bold()
-                        
-                        Divider()
-                    }
-                    .padding(.horizontal)
-                    
-                    
-                    
-                    HStack(alignment: .center) {
-                        
-                        Spacer()
-                        
-                        Image(systemName: "message")
-                            .onTapGesture {
-                                print("comment")
-                            }
-                        
-                        Spacer()
-                        
-                        Image(systemName: "arrow.2.squarepath")
-                            .onTapGesture {
-                                print("repost")
-                            }
-                        
-                        Spacer()
-//
-                        if vm.post.didLike {
-                            Group{
-                                Image(systemName: "heart.fill")
+                            
+                            
+                            HStack(alignment: .center) {
+                                
+                                Spacer()
+                                
+                                Image(systemName: "message")
                                     .onTapGesture {
-                                        vm.unlikeThisPost()
+                                        print("comment")
                                     }
-                            }
-                            .foregroundColor(Color.red)
-
-
-                        } else {
-                            Group{
-                                Image(systemName: "heart")
+                                
+                                Spacer()
+                                
+                                Image(systemName: "arrow.2.squarepath")
                                     .onTapGesture {
-                                        vm.likeThisPost()
+                                        print("repost")
                                     }
+                                
+                                Spacer()
+                                //
+                                if vm.post.didLike {
+                                    Group{
+                                        Image(systemName: "heart.fill")
+                                            .onTapGesture {
+                                                vm.unlikeThisPost()
+                                            }
+                                    }
+                                    .foregroundColor(Color.red)
+                                    
+                                    
+                                } else {
+                                    Group{
+                                        Image(systemName: "heart")
+                                            .onTapGesture {
+                                                vm.likeThisPost()
+                                            }
+                                    }
+                                }
+                                
+                                Spacer()
                             }
+                            .font(.title3)
+                            .padding(.vertical, 3)
+                            
                         }
-                        
-                        Spacer()
                     }
-                    .font(.title3)
-                    .padding(.vertical, 3)
+                    
+                    Divider()
+                    
+                    // comment text field
+                    ForEach(vm.comments) { comment in
+                        DetailPostCommentView(comment: comment)
+                    }
                     
                 }
                 
-                Divider()
-                
-                // comment text field
-                ForEach(vm.comments) { comment in
-                    DetailPostCommentView(comment: comment)
-                }
+                bottomChat
+                //                .padding(.vertical, 50)
                 
             }
-            
-            bottomChat
-//                .padding(.vertical, 50)
-            
         }
+        .onTapGesture {
+            self.showMenuOfPost = false
+        }
+        
+        
     }
-    
+    private var tapmenu : some View {
+        
+        ZStack{
+            if vmAuth.currentUser?.uid == vm.post.user?.uid {
+                VStack(spacing: 0) {
+                    Group{
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("do nothing")
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.black)
+                                .padding()
+                        }
+                        
+                        Divider()
+                        
+                        Button {
+                            vm.deletePost { done in
+                                if done {
+                                    dismiss()
+                                }
+                            }
+                            
+                        } label: {
+                            Text("delete")
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.red)
+                                .padding()
+                        }
+                    }
+                }
+                .frame(width: 130)
+                .background(Color.init(white: 0.7))
+                .cornerRadius(20)
+            } else {
+                VStack(spacing: 0) {
+                    Group{
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("do nothing")
+                                .fontWeight(.bold)
+                                .foregroundColor(Color.black)
+                                .padding()
+                        }
+                        
+    //                    Divider()
+    //
+    //
+    //                    Button {
+    //
+    //                    } label: {
+    //                        Text("delete")
+    //                            .fontWeight(.bold)
+    //                            .foregroundColor(Color.red)
+    //                            .padding()
+    //                    }
+                    }
+                }
+                .frame(width: 130)
+                .background(Color.init(white: 0.7))
+                .cornerRadius(20)
+            }
+        }
+
+    }
     
     private var bottomChat: some View{
         HStack{
@@ -317,7 +422,7 @@ struct DetailPostCommentView: View {
                         HStack{
                             Text(comment.time.dateValue(), style: .time)
                         }
-                            .foregroundColor(Color.gray)
+                        .foregroundColor(Color.gray)
                     }
                     
                     Text(comment.commentText)
@@ -337,7 +442,7 @@ struct DetailPostCommentView: View {
 
 struct DetailPostView_Previews: PreviewProvider {
     static var previews: some View {
-//        DetailPostView(post: nil)
+        //        DetailPostView(post: nil)
         ContentView()
             .environmentObject(AuthViewModel())
     }
