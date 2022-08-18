@@ -18,6 +18,7 @@ class ChatMessagesViewModel : ObservableObject{
     @Published var chatUser: User?
     @Published var chatText = ""
     @Published var messages = [Message]()
+    @Published var scrollCount = 0
     
     let service = Service()
     
@@ -26,6 +27,8 @@ class ChatMessagesViewModel : ObservableObject{
             self.chatUser = chatUser
             self.fetchMessages(chatUser: chatUser)
         }
+        
+        self.scrollCount += 1
     }
     
     
@@ -122,6 +125,7 @@ class ChatMessagesViewModel : ObservableObject{
                 }
                 
                 self.chatText = ""
+                self.scrollCount += 1
             }
         }
     }
@@ -139,57 +143,83 @@ struct ChatMessagesView: View {
         
         
     }
+    
     var body: some View {
-        VStack {
-            ScrollView{
-                Text(vm.chatUser?.name ?? "chatUser name")
-                
-                if vm.messages.isEmpty {
-                    Text("no Chat")
+            ScrollView {
+                ScrollViewReader { ScrollViewProxy in
                     
-                } else {
-                    ForEach(vm.messages) { message in
-                       MessagesView(message: message)
+                    VStack{
+                        if vm.messages.isEmpty {
+                            Text("no Chat")
+                            
+                        } else {
+                            
+                        
+                            ForEach(0 ..< self.vm.messages.count, id: \.self ) { index in
+                                
+                                    MessagesView(showProfile: true, message: self.vm.messages[index])
+                                                                
+                            }
+                            
+                        }
+                        
+                        HStack{Spacer()}
+                            .id("Empty")
+                        
+                        
                     }
+                    .onReceive(vm.$scrollCount) { _ in
+                        withAnimation(.easeInOut(duration: 0.1))  {
+                            ScrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                        }
+                    }
+                    
                 }
-                
-            }
-            HStack{
-                Image(systemName: "photo")
-                    .padding()
-                TextField("send a message", text: $vm.chatText)
-                    .padding(.horizontal)
-                    .padding(.vertical, 15)
-                    .background(Color.white)
-                    .cornerRadius(30)
-                
-                if vm.chatText.isEmpty {
-                    Button {
-                    } label: {
-                        Image(systemName: "paperplane")
-                            .font(.system(size: 25))
-                            .foregroundColor(Color.init(white: 0.5))
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 20)
-                } else {
-                    Button {
-                        vm.sendMessage()
-                    } label: {
-                        Image(systemName: "paperplane")
-                            .font(.system(size: 25))
-                            .foregroundColor(Color.white)
-
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 20)
-                }
-                
-            }
-            .background(Color.gray)
-//            .padding(.bottom, 50)
         }
         .navigationTitle(vm.chatUser?.name ?? "chat User" )
+        .safeAreaInset(edge: .bottom) {
+            bottomView
+        }
+        
+        
+    }
+    
+    private var bottomView :  some View {
+        
+        HStack{
+            Image(systemName: "photo")
+                .padding()
+            TextField("send a message", text: $vm.chatText)
+                .padding(.horizontal)
+                .padding(.vertical, 15)
+                .background(Color.white)
+                .cornerRadius(30)
+            
+            if vm.chatText.isEmpty {
+                Button {
+                } label: {
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 25))
+                        .foregroundColor(Color.init(white: 0.5))
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 20)
+            } else {
+                Button {
+                    vm.sendMessage()
+                } label: {
+                    Image(systemName: "paperplane")
+                        .font(.system(size: 25))
+                        .foregroundColor(Color.white)
+
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 20)
+            }
+            
+        }
+        .background(Color.gray)
+
         
         
     }
@@ -197,6 +227,8 @@ struct ChatMessagesView: View {
 
 struct MessagesView: View {
     
+    
+    var showProfile = true
     let message : Message
     @EnvironmentObject var vmAuth : AuthViewModel
     
@@ -220,22 +252,24 @@ struct MessagesView: View {
             } else {
                 
                 HStack(alignment: .top) {
-                   
                     
-                    ZStack{
-                        WebImage(url: URL(string: message.user?.profileImageUrl ?? "profile"))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 45, height: 45)
-                            .cornerRadius(100)
-                            .zIndex(1)
-                        
-                        Image(systemName: "person")
-                            .frame(width: 45, height: 45)
-                            .background(Color.gray)
-                            .cornerRadius(100)
-                        
+                    if self.showProfile {
+                        ZStack{
+                            WebImage(url: URL(string: message.user?.profileImageUrl ?? "profile"))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(100)
+                                .zIndex(1)
+                            
+                            Image(systemName: "person")
+                                .resizable()
+                                .background(Color.gray)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(100)
+                        }
                     }
+                                       
                     
                     Text(message.chatText)
                         .fontWeight(.bold)

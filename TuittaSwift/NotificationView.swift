@@ -167,8 +167,6 @@ struct NoticeView: View {
         .onTapGesture {
             self.showPost = true
         }
-        
-        
     }
 }
 
