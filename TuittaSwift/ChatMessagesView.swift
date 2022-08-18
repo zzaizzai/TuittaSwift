@@ -20,15 +20,17 @@ class ChatMessagesViewModel : ObservableObject{
     @Published var messages = [Message]()
     @Published var scrollCount = 0
     
+    
     let service = Service()
     
     init(chatUser: User?) {
         DispatchQueue.main.async {
             self.chatUser = chatUser
             self.fetchMessages(chatUser: chatUser)
+            self.scrollCount += 1
         }
         
-        self.scrollCount += 1
+        
     }
     
     
@@ -52,7 +54,8 @@ class ChatMessagesViewModel : ObservableObject{
                     let docId = change.document.documentID
                     let data = change.document.data()
                     
-                        self.messages.append(.init(documentId: docId, data: data))
+                    self.messages.append(.init(documentId: docId, data: data))
+                    self.scrollCount += 1
                 }
             })
             
@@ -94,9 +97,6 @@ class ChatMessagesViewModel : ObservableObject{
             
         }
         
-        
-        
-        
         //my user DB
         //chat Messages
         let myMessageData = [
@@ -136,6 +136,7 @@ struct ChatMessagesView: View {
     
     @ObservedObject var vm : ChatMessagesViewModel
     @EnvironmentObject var vmAuth : AuthViewModel
+    @Environment(\.dismiss) private var dismiss
     
     
     init(chatUser: User?) {
@@ -145,53 +146,100 @@ struct ChatMessagesView: View {
     }
     
     var body: some View {
-            ScrollView {
-                ScrollViewReader { ScrollViewProxy in
+        ScrollView {
+            ScrollViewReader { ScrollViewProxy in
+                
+                VStack{
+                    if vm.messages.isEmpty {
+                        Text("no Chat")
+                        
+                    } else {
+                        
+                        
+                        ForEach(0 ..< self.vm.messages.count, id: \.self ) { index in
+                            
+                            MessagesView(showProfile: true, message: self.vm.messages[index])
+                            
+                        }
+                        
+                    }
                     
-                    VStack{
-                        if vm.messages.isEmpty {
-                            Text("no Chat")
-                            
-                        } else {
-                            
-                        
-                            ForEach(0 ..< self.vm.messages.count, id: \.self ) { index in
-                                
-                                    MessagesView(showProfile: true, message: self.vm.messages[index])
-                                                                
-                            }
-                            
-                        }
-                        
-                        HStack{Spacer()}
-                            .id("Empty")
-                        
-                        
-                    }
-                    .onReceive(vm.$scrollCount) { _ in
-                        withAnimation(.easeInOut(duration: 0.1))  {
-                            ScrollViewProxy.scrollTo("Empty", anchor: .bottom)
-                        }
-                    }
+                    HStack{Spacer()}
+                        .id("Empty")
+                    
                     
                 }
+                .onReceive(vm.$scrollCount) { _ in
+                    withAnimation(.easeInOut(duration: 0.1))  {
+                        ScrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                    }
+                }
+                
+            }
         }
+        .navigationBarHidden(true)
         .navigationTitle(vm.chatUser?.name ?? "chat User" )
         .safeAreaInset(edge: .bottom) {
             bottomView
         }
+        .safeAreaInset(edge: .top) {
+            navBar
+                .opacity(0.98)
+        }
+    }
+    private var navBar : some View {
         
-        
+        ZStack(alignment: .top) {
+            HStack(alignment: .top) {
+                
+                Button {
+                    self.dismiss()
+                } label: {
+                    Image(systemName: "arrowshape.turn.up.backward.fill")
+                    
+                        .foregroundColor(Color.white)
+                        .frame(width: 40, height: 40)
+                        .background(Color.black)
+                        .clipShape(Capsule())
+                }
+                .padding(.horizontal)
+                
+                Spacer()
+                
+            }
+            .frame(width: .infinity, height: 70)
+            .background(Color.init(white: 0.9))
+            
+            VStack{
+                ZStack{
+                    WebImage(url: URL(string: vm.chatUser?.profileImageUrl ?? "profile"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 30, height: 30)
+                        .cornerRadius(100)
+                        .zIndex(1)
+                    
+                    Image(systemName: "person")
+                        .resizable()
+                        .background(Color.white)
+                        .frame(width: 30, height: 30)
+                        .cornerRadius(100)
+                }
+                
+                Text(vm.chatUser?.name ?? "name")
+            }
+            
+        }
     }
     
     private var bottomView :  some View {
         
         HStack{
-            Image(systemName: "photo")
+            Image(systemName: "")
                 .padding()
             TextField("send a message", text: $vm.chatText)
                 .padding(.horizontal)
-                .padding(.vertical, 15)
+                .padding(.vertical, 10)
                 .background(Color.white)
                 .cornerRadius(30)
             
@@ -203,7 +251,7 @@ struct ChatMessagesView: View {
                         .foregroundColor(Color.init(white: 0.5))
                 }
                 .padding(.horizontal)
-                .padding(.vertical, 20)
+                .padding(.vertical, 15)
             } else {
                 Button {
                     vm.sendMessage()
@@ -211,15 +259,16 @@ struct ChatMessagesView: View {
                     Image(systemName: "paperplane")
                         .font(.system(size: 25))
                         .foregroundColor(Color.white)
-
+                    
                 }
+                //                .padding(.horizontal, 5)
                 .padding(.horizontal)
-                .padding(.vertical, 20)
+                .padding(.vertical, 15)
             }
             
         }
         .background(Color.gray)
-
+        
         
         
     }
@@ -269,7 +318,7 @@ struct MessagesView: View {
                                 .cornerRadius(100)
                         }
                     }
-                                       
+                    
                     
                     Text(message.chatText)
                         .fontWeight(.bold)
@@ -287,7 +336,7 @@ struct MessagesView: View {
                 
             }
             
-
+            
         }
     }
 }
@@ -295,7 +344,7 @@ struct MessagesView: View {
 struct RecentMessagesView_Previews: PreviewProvider {
     static var previews: some View {
 //        ChatMessagesView(chatUser: nil)
-        ContentView()
+                ContentView()
             .environmentObject(AuthViewModel())
     }
 }
