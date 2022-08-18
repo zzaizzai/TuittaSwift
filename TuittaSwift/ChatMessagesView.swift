@@ -49,14 +49,17 @@ class ChatMessagesViewModel : ObservableObject{
                     let docId = change.document.documentID
                     let data = change.document.data()
                     
-                    guard let fromUid = data["fromUid"] as? String else { return }
-                    
-                    self.service.getUserData(userUid: fromUid) { fromUser in
-                        self.messages.append(.init(documentId: docId, fromUser: fromUser, data: data))
-                    }
-                    
+                        self.messages.append(.init(documentId: docId, data: data))
                 }
             })
+            
+            for i in 0 ..< self.messages.count {
+                let userUid = self.messages[i].fromUid
+                
+                self.service.getUserData(userUid: userUid) { userData in
+                    self.messages[i].user = userData
+                }
+            }
         }
     }
     
@@ -220,7 +223,7 @@ struct MessagesView: View {
                    
                     
                     ZStack{
-                        WebImage(url: URL(string: message.user.profileImageUrl))
+                        WebImage(url: URL(string: message.user?.profileImageUrl ?? "profile"))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 45, height: 45)

@@ -97,10 +97,10 @@ struct Notice: Identifiable, Codable {
     let time: Timestamp
     let type : String
     
-    let user: User
-    let post: Post
+    var user: User?
+    var post: Post?
     
-    init(documentId: String,user: User, post: Post, data: [String:Any]) {
+    init(documentId: String, data: [String:Any]) {
         self.documentId = documentId
         self.postUid = data["postUid"] as? String ?? "no postUid"
         self.userUid = data["userUid"] as? String ?? "no userUid"
@@ -108,8 +108,6 @@ struct Notice: Identifiable, Codable {
         self.type = data["type"] as? String ?? "no type"
         self.time = data["time"] as? Timestamp ?? Timestamp()
         
-        self.user = user
-        self.post = post
     }
 }
 
@@ -121,14 +119,12 @@ struct Message: Identifiable, Codable {
     let chatText, fromUid : String
     let time : Timestamp
     
-    let user: User
+    var user: User?
     
-    init(documentId: String, fromUser: User, data: [String:Any]) {
+    init(documentId: String, data: [String:Any]) {
         self.documentId = documentId
         self.chatText = data["chatText"] as? String ?? "no chatText"
         self.fromUid = data["fromUid"] as? String ?? "no fromUid"
         self.time = data["time"] as? Timestamp ?? Timestamp()
-        
-        self.user = fromUser
     }
 }

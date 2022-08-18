@@ -16,9 +16,7 @@ class MainMessagesViewModel : ObservableObject {
     
     
     init(){
-        DispatchQueue.main.async {
-            self.fetchRecentMessages()
-        }
+        self.fetchRecentMessages()
     }
     
     func fetchRecentMessages() {
@@ -34,12 +32,16 @@ class MainMessagesViewModel : ObservableObject {
                 let docId = doc.documentID
                 let data = doc.data()
                 
-                guard let chatUser = data["fromUid"] as? String else { return }
-                
-                self.service.getUserData(userUid: chatUser) { userData in
-                    self.recentMessages.append(.init(documentId: docId, fromUser: userData , data: data))
-                }
+                self.recentMessages.insert(.init(documentId: docId, data: data), at: 0)
             })
+            
+            for i in 0 ..< self.recentMessages.count {
+                let userUid = self.recentMessages[i].fromUid
+                
+                self.service.getUserData(userUid: userUid) { userData in
+                    self.recentMessages[i].user = userData
+                }
+            }
         }
     }
 }
@@ -100,7 +102,7 @@ struct RecentMessageView: View {
     var body: some View {
         HStack(alignment: .top) {
             ZStack{
-                WebImage(url: URL(string: recentMessage.user.profileImageUrl))
+                WebImage(url: URL(string: recentMessage.user?.profileImageUrl ?? "profile"))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 60, height: 60)
@@ -116,7 +118,7 @@ struct RecentMessageView: View {
             
             VStack(alignment: .leading) {
                 HStack{
-                    Text(recentMessage.user.name)
+                    Text(recentMessage.user?.name ?? "name")
                         .fontWeight(.bold)
                     
                     Spacer()
