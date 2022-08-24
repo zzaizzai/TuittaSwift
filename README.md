@@ -3,6 +3,9 @@
 ## Studying project   
 
 
+22/8/13 ~8/18   
+
+
 
 MainPost, show all posts and comment button, like button   
 <img width="30%" src="https://user-images.githubusercontent.com/69841333/186425830-3ef608cf-edc1-4300-9f33-cf26a36f43fc.png">
